@@ -2,13 +2,29 @@
   "name": "@fl0/template-nodejs",
   "version": "1.0.0",
   "description": "A simple Node.js Express app for getting started on FL0",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "dev": "nodemon src/index.js"
   },
-  "author": "",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [],
+  "author": "Diego Baeza",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "pg-promise": "^11.5.4",
+    "sequelize": "^6.37.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }

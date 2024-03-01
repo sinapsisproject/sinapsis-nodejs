@@ -4,6 +4,6 @@ import validarToken from "../helpers/validate-jwt.js";
 
 const router = Router();
 
-router.post("/" , moduleController.createModule);
+router.post("/" , validarToken , moduleController.createModule);
 
 export default router;

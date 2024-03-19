@@ -85,7 +85,8 @@ const getCoursesByIdUser = async(req , res) => {
             },
             include: [
                 {
-                    model : course
+                    model : course,
+                    include: [module]
                 }
             ]
         });

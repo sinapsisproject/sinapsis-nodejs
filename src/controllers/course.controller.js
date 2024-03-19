@@ -341,7 +341,7 @@ const getContentCourse= async(req , res) => {
 
             lista.contenido = tem;
 
-            object.push(tem);
+            //object.push(tem);
 
 
             lista = {};

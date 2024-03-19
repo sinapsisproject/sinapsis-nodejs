@@ -15,6 +15,9 @@ export const questions_foro = sequelize.define('preguntas_foro', {
     },
     id_usuario: {
         type: DataTypes.INTEGER
+    },
+    nombre_usuario: {
+        type: DataTypes.STRING
     }
 });
 

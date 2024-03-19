@@ -2,13 +2,14 @@ import { module } from "./../models/module.model.js";
 
 const createModule = async(req , res) => {
 
-    const {nombre, estado, id_curso } = req.body;
+    const {nombre, estado, id_curso, ubicacion } = req.body;
 
     try {
         const newModule = await module.create({
             nombre,
             estado,
-            id_curso
+            id_curso,
+            ubicacion
         });
     
         res.json(newModule);

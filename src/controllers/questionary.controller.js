@@ -4,12 +4,12 @@ import { alternative } from '../models/alternativa.model.js';
 
 const createQuestionary = async(req , res) => {
 
-    const {titulo, descripcion , estado, aprovacion, tiempo, ubicacion, id_modulo} = req.body;
+    const {nombre, descripcion , estado, aprovacion, tiempo, ubicacion, id_modulo} = req.body;
 
     try {
         
         const newQuestionary = await questionary.create({
-            titulo,
+            nombre,
             descripcion,
             estado,
             aprovacion,

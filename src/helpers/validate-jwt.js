@@ -8,7 +8,6 @@ function validarToken(req, res, next) {
     // Verificar si existe el token en el header de la solicitud
     const token_res = req.headers['authorization'];
 
-    console.log(token_res);
     if (!token_res) {
 
       return res.status(401).json({ error: 'Acceso denegado. Token no proporcionado.' });

@@ -8,7 +8,7 @@ export const text = sequelize.define('texto', {
         primaryKey: true,
         autoIncrement: true
     },
-    titulo: {
+    nombre: {
         type: DataTypes.STRING
     },
     texto: {

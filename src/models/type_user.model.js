@@ -22,7 +22,7 @@ export const type_user = sequelize.define('tipo_usuario', {
 
 //       await type_user.destroy({
 //         where: {}, // Especificamos un objeto vacío para seleccionar todos los registros
-//         truncate: false // Indicamos que queremos truncar (eliminar) todos los registros en lugar de realizar una eliminación en cascada
+//         truncate: true // Indicamos que queremos truncar (eliminar) todos los registros en lugar de realizar una eliminación en cascada
 //       });
 
 //       const nuevoTipo = await type_user.create({

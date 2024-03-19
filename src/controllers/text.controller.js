@@ -3,12 +3,12 @@ import { text } from './../models/text.model.js';
 
 const createText = async(req , res) => {
 
-    const {titulo, texto , ubicacion, estado, id_modulo} = req.body;
+    const {nombre, texto , ubicacion, estado, id_modulo} = req.body;
 
     try {
         
         const newText = await text.create({
-            titulo,
+            nombre,
             texto,
             ubicacion,
             estado,

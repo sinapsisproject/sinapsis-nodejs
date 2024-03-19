@@ -8,6 +8,7 @@ const registerUser = async(req , res) => {
     
     const {nombre, username, email , telefono, password, estado, id_tipo_usuario } = req.body;
 
+    console.log(req.body);
 
      /** Verificamos que el usuario ingrese el email y el password */
      if(
@@ -43,7 +44,6 @@ const registerUser = async(req , res) => {
                  const salt = bcryptjs.genSaltSync();
                  const password_encrypt = bcryptjs.hashSync(password, salt);
 
-
                 const newUser = await user.create({
                     nombre, 
                     username, 
@@ -53,8 +53,8 @@ const registerUser = async(req , res) => {
                     estado,
                     id_tipo_usuario
                 });
-        
-                res.json(newUser);
+
+                res.json({'status' : true , 'data' : newUser});
 
             }
             
@@ -67,12 +67,12 @@ const registerUser = async(req , res) => {
             })
         }
 
-     }else{
+    }else{
         res.json({
             "status" : false,
             "msg"    : 'Falta un dato'
         })
-     }
+    }
 
 
 }

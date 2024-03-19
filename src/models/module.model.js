@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, INTEGER } from 'sequelize';
 import { sequelize } from '../database/database.js';
 
 import { video } from './video.model.js';
@@ -18,6 +18,9 @@ export const module = sequelize.define('modulo', {
     },
     estado: {
         type: DataTypes.STRING
+    },
+    ubicacion : {
+        type: DataTypes.INTEGER
     }
 });
 

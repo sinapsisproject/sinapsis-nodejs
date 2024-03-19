@@ -9,7 +9,7 @@ export const questionary = sequelize.define('cuestionario', {
         primaryKey: true,
         autoIncrement: true
     },
-    titulo: {
+    nombre: {
         type: DataTypes.STRING
     },
     descripcion: {
@@ -18,7 +18,7 @@ export const questionary = sequelize.define('cuestionario', {
     estado: {
         type: DataTypes.STRING
     },
-    aprovacion : {
+    aprobacion : {
         type: DataTypes.FLOAT
     },
     tiempo : {

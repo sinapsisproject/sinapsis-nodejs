@@ -3,6 +3,7 @@ import { sequelize } from "./database/database.js";
 
 
 import './models/type_course.model.js';
+import './models/instructor.model.js';
 import './models/course.model.js';
 import './models/module.model.js';
 import './models/video.model.js';
@@ -18,7 +19,7 @@ import './models/user_course.model.js';
 
 const main=async ()=>{
     try {
-        ////await sequelize.sync({alter: true});
+        //await sequelize.sync({alter: true});
         await sequelize.authenticate();
         console.log("Connection has been established successfully.");
         app.listen(app.get("port"));

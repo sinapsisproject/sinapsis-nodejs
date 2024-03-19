@@ -16,6 +16,7 @@ import questionRoutes from "./routes/question.routes.js";
 import foroRoutes from "./routes/foro.routes.js";
 import questions_foroRoutes from "./routes/questions_foro.routes.js";
 import response_foroRoutes from "./routes/response_foro.route.js";
+import instructorRoutes from "./routes/instructor.routes.js";
 
 const app = express();
 
@@ -40,5 +41,6 @@ app.use('/api/question' , questionRoutes);
 app.use('/api/foro' , foroRoutes);
 app.use('/api/question_foro' , questions_foroRoutes);
 app.use('/api/response_foro' , response_foroRoutes);
+app.use('/api/instructor' , instructorRoutes);
 
 export default app;

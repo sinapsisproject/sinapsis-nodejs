@@ -10,7 +10,6 @@ const authLogin = async(req , res)=>{
     try {
         
         const {usuario , password} = req.body;
-
         const response_user = await user.findAll({
             where: {
                 username: usuario
@@ -24,8 +23,10 @@ const authLogin = async(req , res)=>{
             if(validPassword){
                 const token = await generateJWT(response_user[0].id);
                 res.json({
+                    "status"        : true,
                     "id"            : response_user[0].id,
                     "email"         : response_user[0].email,
+                    "nombre"        : response_user[0].nombre,
                     "createdAt"    : response_user[0].createdAt,
                     "telefono"      : response_user[0].telefono,
                     "token"         : token

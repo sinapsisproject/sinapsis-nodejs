@@ -16,6 +16,9 @@ export const course = sequelize.define('curso', {
     descripcion: {
         type: DataTypes.TEXT
     },
+    descripcion_corta: {
+        type: DataTypes.TEXT
+    },
     link_video: {
         type: DataTypes.STRING(500)
     },
@@ -24,6 +27,24 @@ export const course = sequelize.define('curso', {
     },
     estado: {
         type: DataTypes.STRING
+    },
+    imagen: {
+        type: DataTypes.TEXT
+    },
+    precio: {
+        type: DataTypes.INTEGER
+    },
+    objetivo: {
+        type: DataTypes.TEXT
+    },
+    duracion : {
+        type: DataTypes.STRING
+    },
+    segmento : {
+        type: DataTypes.TEXT
+    },
+    estudiantes : {
+        type: DataTypes.TEXT
     }
 });
 

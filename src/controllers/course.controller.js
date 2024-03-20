@@ -352,16 +352,35 @@ const getContentCourse= async(req , res) => {
     )
 
 
-
-
-
-
-
-
     res.json(object);   
 
 }
 
+
+
+
+const getCourseByIdInstructor = async(req , res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const cursos = await course.findAll({
+            where: {
+                id_instructor : id
+            }
+        });
+        res.json(cursos);
+
+    } catch (error) {
+        res.json({
+            "status" : false,
+            "msg"    : 'Error al ejecutar la consulta',
+            "error"  : error
+        })
+    }
+
+}
 
 
 
@@ -374,5 +393,6 @@ export const methods = {
     getSidebarByIdCourse,
     getCourseById,
     getCourseByIdFreeData,
-    getContentCourse
+    getContentCourse,
+    getCourseByIdInstructor
 }

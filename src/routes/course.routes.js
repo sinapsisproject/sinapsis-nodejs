@@ -12,5 +12,6 @@ router.get("/get_sidebar_by_id_course/:id" , validarToken, courseController.getS
 router.get("/get_course_by_id/:id" , validarToken, courseController.getCourseById);
 router.get("/get_course_by_id_free_data/:id" , courseController.getCourseByIdFreeData);
 router.get("/get_content_course/:id" , courseController.getContentCourse);
+router.get("/get_course_by_id_instructor/:id" , courseController.getCourseByIdInstructor);
 
 export default router;

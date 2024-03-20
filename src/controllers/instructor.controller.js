@@ -25,6 +25,54 @@ const createInstructor = async(req , res) => {
 
 }
 
+const getInstructors = async(req , res) => {
+
+    try {
+        const instructores = await instructor.findAll({});
+       
+        res.json({
+            "status" : true,
+            "response" : instructores
+        })
+
+    } catch (error) {
+        res.json({
+            "status" : false,
+            "msg"    : 'Error al ejecutar la consulta',
+            "error"  : error
+        })
+    }
+}
+
+
+const getInstructorById = async(req , res) => {
+
+    try {
+        
+        const { id } = req.params;
+
+        const profesor = await instructor.findByPk(id);
+
+        res.json({
+            "status" : true,
+            "response" : profesor
+        })
+
+
+    } catch (error) {
+        res.json({
+            "status" : false,
+            "msg"    : 'Error en la consulta',
+            "error"  : error
+        })
+    }
+
+}
+
+
+
 export const methods = {
-    createInstructor
+    createInstructor,
+    getInstructorById,
+    getInstructors
 }

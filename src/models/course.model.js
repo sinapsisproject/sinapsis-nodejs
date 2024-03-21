@@ -4,6 +4,7 @@ import { sequelize } from '../database/database.js';
 import { module } from './module.model.js';
 import { user_course } from './user_course.model.js';
 
+
 export const course = sequelize.define('curso', {
     id: {
         type: DataTypes.INTEGER,
@@ -67,6 +68,5 @@ user_course.belongsTo(course , {
     foreignKey: 'id_curso',
     targetId: 'id'
 });
-
 
 

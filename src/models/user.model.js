@@ -3,6 +3,7 @@ import { sequelize } from '../database/database.js';
 
 import { address } from '../models/address.model.js';
 import { user_course } from './user_course.model.js';
+import { response_questionary } from './response_questionary.model.js';
 
 export const user = sequelize.define('usuario', {
     id: {
@@ -49,3 +50,14 @@ user_course.belongsTo(user , {
     foreignKey: 'id_usuario',
     targetId: 'id'
 });
+
+user.hasMany(response_questionary, {
+    foreignKey: 'id_usuario',
+    sourceKey: 'id'
+});
+
+response_questionary.belongsTo(user , {
+    foreignKey: 'id_usuario',
+    targetId: 'id'
+});
+

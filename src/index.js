@@ -16,6 +16,7 @@ import './models/address.model.js';
 import './models/comuna.model.js';
 import './models/region.model.js';
 import './models/user_course.model.js';
+import './models/response_questionary.model.js';
 
 const main=async ()=>{
     try {

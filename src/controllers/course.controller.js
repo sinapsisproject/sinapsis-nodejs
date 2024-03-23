@@ -1,3 +1,6 @@
+import jwt from "jsonwebtoken";
+const secretKey = process.env.SECRETORPRIVATEKEY;
+
 import { course } from "../models/course.model.js";
 import { module } from "../models/module.model.js";
 import { video } from "../models/video.model.js";
@@ -104,7 +107,9 @@ const getCoursesByIdUser = async(req , res) => {
 
 
 const getSidebarByIdCourse = async(req , res) => {
-   
+
+        const id_usuario = req.usuario.uid;
+
         const { id } = req.params;
 
         let lista = {};

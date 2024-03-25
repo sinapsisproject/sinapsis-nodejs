@@ -19,7 +19,11 @@ function validarToken(req, res, next) {
       // Verificar y decodificar el token
       jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
-          return res.status(403).json({ error: 'Acceso denegado. Token inválido.' });
+          return res.status(403).json(
+            { 
+              status : false,
+              error: 'Acceso denegado. Token inválido.' 
+            });
         } else {
           // El token es válido, adjuntar los datos decodificados a la solicitud
           req.usuario = decoded;

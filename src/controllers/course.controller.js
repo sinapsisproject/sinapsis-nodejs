@@ -14,6 +14,7 @@ import { question } from "../models/question.model.js";
 import { alternative } from "../models/alternativa.model.js";
 import { questions_foro } from "../models/questions_foro.model.js";
 import { response_foro } from "../models/response_foro.js";
+import { progress } from "../models/progress.model.js";
 
 
 
@@ -109,12 +110,20 @@ const getCoursesByIdUser = async(req , res) => {
 const getSidebarByIdCourse = async(req , res) => {
 
         const id_usuario = req.usuario.uid;
-
+        var existe;
         const { id } = req.params;
 
         let lista = {};
         let object = [];
         let tem = [];
+
+        const progress_user  = await progress.findAll({
+            where: {
+                id_curso : id,
+                id_usuario : id_usuario
+            }
+        });
+
 
         const data =  await module.findAll({
             where: {
@@ -162,28 +171,39 @@ const getSidebarByIdCourse = async(req , res) => {
 
                 dato.dataValues.videos.map(video => video.dataValues).map( (video) =>{
                     video.tipo = 'video';
+                    existe = progress_user.some(datos => datos.nombre_item == video.tipo && datos.id_item == video.id);
+                    video.done = existe ? true : false;
                     tem.push(video);
                 })
 
                 dato.dataValues.apuntes.map(apunte => apunte.dataValues).map( (apunte) =>{
                     apunte.tipo = 'apunte';
+                    existe = progress_user.some(datos => datos.nombre_item == apunte.tipo && datos.id_item == apunte.id);
+                    apunte.done = existe ? true : false;
                     tem.push(apunte);
                 })
 
                 dato.dataValues.textos.map(texto => texto.dataValues).map( (texto) =>{
                     texto.tipo = 'texto';
+                    existe = progress_user.some(datos => datos.nombre_item == texto.tipo && datos.id_item == texto.id);
+                    texto.done = existe ? true : false;
                     tem.push(texto);
                 })
 
                 dato.dataValues.cuestionarios.map(cuestionario => cuestionario.dataValues).map( (cuestionario) =>{
                     cuestionario.tipo = 'cuestionario';
+                    existe = progress_user.some(datos => datos.nombre_item == cuestionario.tipo && datos.id_item == cuestionario.id);
+                    cuestionario.done = existe ? true : false;
                     tem.push(cuestionario);
                 })
 
                 dato.dataValues.foros.map(foro => foro.dataValues).map( (foro) =>{
                     foro.tipo = 'foro';
+                    existe = progress_user.some(datos => datos.nombre_item == foro.tipo && datos.id_item == foro.id);
+                    foro.done = existe ? true : false;
                     tem.push(foro);
                 })
+
 
 
                 tem.sort(compararPorUbicacion)

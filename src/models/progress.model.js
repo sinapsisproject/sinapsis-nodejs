@@ -8,6 +8,9 @@ export const progress = sequelize.define('avance', {
         primaryKey: true,
         autoIncrement: true
     },
+    id_curso: {
+        type: DataTypes.INTEGER
+    },
     id_item: {
         type: DataTypes.INTEGER
     },

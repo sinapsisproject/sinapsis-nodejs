@@ -6,15 +6,14 @@ import { user } from '../models/user.model.js';
 
 const registerUser = async(req , res) => {
     
-    const {nombre, username, email , telefono, password, estado, id_tipo_usuario } = req.body;
-
-    console.log(req.body);
+    const {nombre, username, email , fecha_nacimiento ,telefono, password, estado, id_tipo_usuario } = req.body;
 
      /** Verificamos que el usuario ingrese el email y el password */
      if(
         typeof nombre !== 'undefined' && nombre !== null && nombre !== ""
      && typeof username !== 'undefined' && username !== null && username !== ""
      && typeof email !== 'undefined' && email !== null && email !== ""
+     && typeof fecha_nacimiento !== 'undefined' && fecha_nacimiento !== null && fecha_nacimiento !== ""
      && typeof telefono !== 'undefined' && telefono !== null && telefono !== ""
      && typeof password !== 'undefined' && password !== null && password !== ""
      && typeof estado !== 'undefined' && estado !== null && estado !== ""
@@ -44,10 +43,12 @@ const registerUser = async(req , res) => {
                  const salt = bcryptjs.genSaltSync();
                  const password_encrypt = bcryptjs.hashSync(password, salt);
 
+
                 const newUser = await user.create({
                     nombre, 
                     username, 
-                    email, 
+                    email,
+                    fecha_nacimiento, 
                     telefono, 
                     password : password_encrypt, 
                     estado,

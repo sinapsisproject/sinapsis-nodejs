@@ -21,6 +21,9 @@ export const user = sequelize.define('usuario', {
     email: {
         type: DataTypes.STRING
     },
+    fecha_nacimiento: {
+        type: DataTypes.DATE
+    },
     telefono: {
         type: DataTypes.STRING
     },

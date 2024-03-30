@@ -9,7 +9,7 @@ const createTransaction = async(req , res)=>{
 
   const id_usuario = req.usuario.uid;
 
-  const returnUrl = req.protocol + "://" + req.get("host") + "/api/pay/validate";
+  const returnUrl = process.env.PROTOCOL+"://" + req.get("host") + "/api/pay/validate";
 
   console.log("RETORNO "+returnUrl);
 

@@ -5,6 +5,7 @@ import { address } from '../models/address.model.js';
 import { user_course } from './user_course.model.js';
 import { response_questionary } from './response_questionary.model.js';
 import { progress } from './progress.model.js';
+import { order } from './orders.model.js';
 
 export const user = sequelize.define('usuario', {
     id: {
@@ -74,6 +75,17 @@ progress.belongsTo(user , {
     foreignKey: 'id_usuario',
     targetId: 'id'
 });
+
+user.hasMany(order, {
+    foreignKey: 'id_usuario',
+    sourceKey: 'id'
+});
+
+order.belongsTo(user , {
+    foreignKey: 'id_usuario',
+    targetId: 'id'
+});
+
 
 
 

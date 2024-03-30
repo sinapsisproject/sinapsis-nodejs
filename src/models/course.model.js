@@ -3,7 +3,8 @@ import { sequelize } from '../database/database.js';
 
 import { module } from './module.model.js';
 import { user_course } from './user_course.model.js';
-
+import { order } from './orders.model.js';
+ 
 
 export const course = sequelize.define('curso', {
     id: {
@@ -65,6 +66,17 @@ course.hasMany(user_course, {
 });
 
 user_course.belongsTo(course , {
+    foreignKey: 'id_curso',
+    targetId: 'id'
+});
+
+
+course.hasMany(order, {
+    foreignKey: 'id_curso',
+    sourceKey: 'id'
+});
+
+order.belongsTo(course , {
     foreignKey: 'id_curso',
     targetId: 'id'
 });

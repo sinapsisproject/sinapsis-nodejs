@@ -24,7 +24,8 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "pg-promise": "^11.5.4",
-    "sequelize": "^6.37.0"
+    "sequelize": "^6.37.0",
+    "transbank-sdk": "^5.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

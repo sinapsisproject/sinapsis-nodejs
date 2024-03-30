@@ -111,7 +111,7 @@ const validateTransaction = async(req , res)=>{
           }
         }
         ).then((result) => {
-          res.redirect(process.env.DOMAIN_SITE+'/perfil/');
+          res.redirect(process.env.DOMAIN_SITE+'/mi-perfil/');
         })
         .catch((error) =>{
           res.redirect(process.env.DOMAIN_SITE+'/error/');  

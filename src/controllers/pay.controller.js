@@ -11,6 +11,8 @@ const createTransaction = async(req , res)=>{
 
   const returnUrl = req.protocol + "://" + req.get("host") + "/api/pay/validate";
 
+  console.log("RETORNO "+returnUrl);
+
   const {id_curso , fecha} = req.body;
 
   const orderUser = await order.create({

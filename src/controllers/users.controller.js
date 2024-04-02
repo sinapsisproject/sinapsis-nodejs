@@ -1,6 +1,7 @@
 import bcryptjs from 'bcryptjs';
 
 import { user } from '../models/user.model.js';
+import { user_course } from '../models/user_course.model.js';
 
 
 
@@ -80,14 +81,37 @@ const registerUser = async(req , res) => {
 
 
 
-const getUser = async(req , res) => {
+const validateUserCourse = async(req , res) => {
 
     const { id } = req.params;
+    const id_usuario = req.usuario.uid;
 
-    res.json({
-        "status" : true,
-        "datos"  : [{"dato1" : "dato1"},{"dato2" : "dato2"},{"dato3" : "dato3"},]
-    })
+   await user_course.findAll({
+        where: {
+            id_curso : id,
+            id_usuario : id_usuario
+        }
+    }).then(array_validate => {
+
+        if(array_validate.length > 0){
+
+            res.json({
+                "status" : true,
+                "msg"    : 'Usuario habilitado'
+            })
+        
+        }else{
+        
+            res.json({
+                "status" : false,
+                "msg"    : 'Usuario inhabilitado para ver este contenido'
+            })
+        }
+
+    }).catch(error => {
+        console.error('Error al ejecutar la consulta:', error);
+    });
+
 
 }
 
@@ -95,5 +119,5 @@ const getUser = async(req , res) => {
 
 export const methods = {
     registerUser,
-    getUser
+    validateUserCourse
 }

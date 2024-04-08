@@ -129,7 +129,6 @@ const getSidebarByIdCourse = async(req , res) => {
             where: {
                 id_curso : id
             },
-            order : [['ubicacion' , 'ASC']],
             include: [
                 video, 
                 note, 
@@ -148,11 +147,20 @@ const getSidebarByIdCourse = async(req , res) => {
                     include : [
                         {
                             model: questions_foro,
-                            include: [response_foro]
+                            include: [
+                                {
+                                    model: response_foro
+                                }
+                            ]
                         }
                     ]
                 }
-            ]           
+            ],
+            order : [
+                ['ubicacion' , 'ASC'],
+                [foro, questions_foro, 'createdAt', 'DESC'],
+                [foro, questions_foro, response_foro, 'createdAt', 'ASC'] 
+            ]          
         });
 
 

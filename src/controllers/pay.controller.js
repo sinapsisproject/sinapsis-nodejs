@@ -11,8 +11,6 @@ const createTransaction = async(req , res)=>{
 
   const returnUrl = process.env.PROTOCOL+"://" + req.get("host") + "/api/pay/validate";
 
-  console.log("RETORNO "+returnUrl);
-
   const {id_curso , fecha} = req.body;
 
   const orderUser = await order.create({
@@ -31,7 +29,10 @@ const createTransaction = async(req , res)=>{
       curso.precio,
       returnUrl
     );
-  
+    
+    console.log("CREAR TRANSACCION");
+    console.log(createResponse);
+
     if(createResponse.token && createResponse.url){
 
       const viewData  = {
@@ -74,6 +75,13 @@ const validateTransaction = async(req , res)=>{
   let tbkToken = params.TBK_TOKEN;
   let tbkOrdenCompra = params.TBK_ORDEN_COMPRA;
   let tbkIdSesion = params.TBK_ID_SESION;
+
+
+  console.log("TOKEN: "+token);
+  console.log("TBK_TOKEN: "+tbkToken);
+  console.log("TBK_ORDEN_COMPRA: "+tbkOrdenCompra);
+  console.log("TBK_ID_SESION: "+tbkIdSesion);
+
 
   if (token && !tbkToken) {//Primer caso (exitoso)
     const commitResponse = await (new WebpayPlus.Transaction()).commit(token);

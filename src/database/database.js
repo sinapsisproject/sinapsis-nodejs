@@ -8,5 +8,5 @@ export const sequelize = new Sequalize({
   username: config.user,
   password: config.password,
   database: config.database,
-  logging: false // Opcional: deshabilita los registros de consultas SQL
+  logging: false
 });

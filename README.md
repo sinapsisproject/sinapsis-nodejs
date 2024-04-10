@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://fl0.com/" target="blank">
-    <img src="https://user-images.githubusercontent.com/88681427/217122968-e6132cad-1944-4ebe-9ec1-105af6a18c4f.png">
+  <a href="https://sinapsisclinica.com/" target="blank">
+    <img src="https://sinapsisclinica.com/wp-content/uploads/2023/09/Diseno-sin-titulo-1.png">
   </a>
 </p>
 
@@ -9,7 +9,7 @@
 
 ## Overview
 
-Use this repository to get up and running on FL0 with the following stack:
+Desarrollado por los mejores ingenieros de Penco:
 
 <table>
 <tr>

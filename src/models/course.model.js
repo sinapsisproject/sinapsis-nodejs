@@ -47,6 +47,9 @@ export const course = sequelize.define('curso', {
     },
     estudiantes : {
         type: DataTypes.TEXT
+    },
+    nota_aprobacion : {
+        type: DataTypes.FLOAT
     }
 });
 

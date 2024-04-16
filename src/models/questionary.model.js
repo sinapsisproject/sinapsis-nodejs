@@ -21,6 +21,12 @@ export const questionary = sequelize.define('cuestionario', {
     aprobacion : {
         type: DataTypes.FLOAT
     },
+    ponderacion : {
+        type: DataTypes.FLOAT
+    },
+    clase : {
+        type: DataTypes.STRING
+    },
     tiempo : {
         type: DataTypes.INTEGER
     },

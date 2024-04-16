@@ -4,7 +4,7 @@ import { sequelize } from '../database/database.js';
 
 const createQuestion = async(req , res) => {
 
-    const {pregunta, tipo, justificacion , id_cuestionario, alternativas} = req.body;
+    const {pregunta, tipo, justificacion , id_cuestionario, puntaje,  alternativas} = req.body;
 
         var response;
         var alternative_array = [];
@@ -12,7 +12,7 @@ const createQuestion = async(req , res) => {
 
             sequelize.transaction(async (t) => {
                 // Insertar el padre y obtener el objeto Padre creado
-                const question_res = await question.create({pregunta, tipo, justificacion, id_cuestionario}, { transaction: t });
+                const question_res = await question.create({pregunta, tipo, justificacion, id_cuestionario, puntaje}, { transaction: t });
               
                 // Insertar los hijos asociados al padre
                 await Promise.all(alternativas.map(async (alternativa) => {

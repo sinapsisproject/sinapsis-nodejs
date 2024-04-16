@@ -15,6 +15,9 @@ export const question = sequelize.define('pregunta', {
     tipo: {
         type: DataTypes.STRING
     },
+    puntaje: {
+        type: DataTypes.INTEGER
+    },
     justificacion: {
         type: DataTypes.TEXT
     }

@@ -6,5 +6,7 @@ const router = Router();
 
 router.post("/" , validarToken , questionaryController.createQuestionary);
 router.get("/:id" , validarToken ,  questionaryController.getQuestionary);
+router.get("/assessment/:id_questionary" , validarToken ,  questionaryController.assessmentTestByUser);
+router.get("/assessment_final/:id_course" , validarToken ,  questionaryController.assessmentFinalByUser);
 
 export default router;

@@ -163,6 +163,7 @@ const getSidebarByIdCourse = async(req , res) => {
             ]          
         });
 
+        let count = 0;
 
         await Promise.all(
             data.map(async (dato) => {
@@ -178,6 +179,7 @@ const getSidebarByIdCourse = async(req , res) => {
                 
 
                 dato.dataValues.videos.map(video => video.dataValues).map( (video) =>{
+                    count++;
                     video.tipo = 'video';
                     existe = progress_user.some(datos => datos.nombre_item == video.tipo && datos.id_item == video.id);
                     video.done = existe ? true : false;
@@ -185,6 +187,7 @@ const getSidebarByIdCourse = async(req , res) => {
                 })
 
                 dato.dataValues.apuntes.map(apunte => apunte.dataValues).map( (apunte) =>{
+                    count++;
                     apunte.tipo = 'apunte';
                     existe = progress_user.some(datos => datos.nombre_item == apunte.tipo && datos.id_item == apunte.id);
                     apunte.done = existe ? true : false;
@@ -192,6 +195,7 @@ const getSidebarByIdCourse = async(req , res) => {
                 })
 
                 dato.dataValues.textos.map(texto => texto.dataValues).map( (texto) =>{
+                    count++;
                     texto.tipo = 'texto';
                     existe = progress_user.some(datos => datos.nombre_item == texto.tipo && datos.id_item == texto.id);
                     texto.done = existe ? true : false;
@@ -199,6 +203,7 @@ const getSidebarByIdCourse = async(req , res) => {
                 })
 
                 dato.dataValues.cuestionarios.map(cuestionario => cuestionario.dataValues).map( (cuestionario) =>{
+                    count++;
                     cuestionario.tipo = 'cuestionario';
                     existe = progress_user.some(datos => datos.nombre_item == cuestionario.tipo && datos.id_item == cuestionario.id);
                     cuestionario.done = existe ? true : false;
@@ -227,7 +232,12 @@ const getSidebarByIdCourse = async(req , res) => {
             })
         )
 
-        res.json(object);   
+        res.json(
+            {
+                "response" : object,
+                "total_progress" : count
+            }
+        );   
 
 }
 

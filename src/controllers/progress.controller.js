@@ -8,10 +8,9 @@ const createProgress = async(req , res) => {
 
     const id_usuario = req.usuario.uid;
 
-    const {id_curso, id_item , nombre_item, total_progress} = req.body;
+    const {id_curso, id_item , nombre_item} = req.body;
 
     try {
-        
         const newProgress = await progress.create({
             id_curso,
             id_item,
@@ -19,24 +18,9 @@ const createProgress = async(req , res) => {
             id_usuario
         })
 
-        const count = await progress.count({
-            where: {
-                id_usuario: id_usuario,
-                id_curso: id_curso
-            }
-        });
-
-        let progress_porcentage = (count * 100) / (total_progress - 1);
-
-
         res.json({
             "status" : true,
-            "response" : newProgress,
-            "progress" : {
-                "items" : count,
-                "total_items" : total_progress,
-                "porcentaje" : parseInt(progress_porcentage)
-            }
+            "response" : newProgress
         });
 
     } catch (error) {
@@ -53,7 +37,7 @@ const createProgress = async(req , res) => {
 const deleteProgres = async(req ,res) => {
 
     const id_usuario = req.usuario.uid;
-    const {id_curso, id_item , nombre_item, total_progress} = req.body;
+    const {id_curso, id_item , nombre_item} = req.body;
 
     await progress.destroy({
         where: {
@@ -64,23 +48,9 @@ const deleteProgres = async(req ,res) => {
         }
     }).then(async affectedRows => {
 
-        const count = await progress.count({
-            where: {
-                id_usuario: id_usuario,
-                id_curso: id_curso
-            }
-        });
-
-        let progress_porcentage = (count * 100) / (total_progress - 1);
-
         res.json({
             "status" : true,
-            "rows" : affectedRows,
-            "progress" : {
-                "items" : count,
-                "total_items" : total_progress,
-                "porcentaje" : parseInt(progress_porcentage)
-            }
+            "rows" : affectedRows
         });
     }).catch(error => {
         res.json({
@@ -97,7 +67,6 @@ const progressData = async(req , res) => {
     const id_usuario = req.usuario.uid;
     const {id_curso, total_progress} = req.body;
 
-
     const count = await progress.count({
         where: {
             id_usuario: id_usuario,
@@ -107,10 +76,11 @@ const progressData = async(req , res) => {
 
     let progress_porcentage = (count * 100) / (total_progress - 1);
 
+
     res.json({
         "status" : true,
         "items" : count,
-        "total_items" : total_progress,
+        "total_items" : parseInt(total_progress),
         "porcentaje" : parseInt(progress_porcentage)
     });
 

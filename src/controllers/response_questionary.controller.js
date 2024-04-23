@@ -49,6 +49,22 @@ const correctionAlternative = async(req , res) => {
                             id : id_alternativa
                         }
                     });
+
+                    const respuestas = response.map(res => res.get({plain: true}));
+                    
+                    if(respuestas[0].opcion == "incorrecta"){
+
+                        let response_correcta = await alternative.findAll({
+                            where : {
+                                id_pregunta : respuestas[0].id_pregunta,
+                                opcion : 'correcta'
+                            }
+                        })
+
+                        correcion.push(response_correcta[0]);
+
+                    }
+
                     correcion.push(response[0]);
                 })
             )

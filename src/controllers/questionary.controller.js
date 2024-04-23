@@ -94,7 +94,8 @@ const assessmentTestByUser = async(req, res) => {
                                     where: {
                                         id_usuario: id_usuario
                                     },
-                                    attributes : ['id', 'id_alternativa', 'id_usuario']
+                                    attributes : ['id', 'id_alternativa', 'id_usuario'],
+                                    required: false
                                 }
                             ]
                         }

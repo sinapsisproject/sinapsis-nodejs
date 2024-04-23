@@ -123,16 +123,15 @@ const assessmentTestByUser = async(req, res) => {
                 cantidad_preguntas = cantidad_preguntas + 1;
 
                 let puntaje_pregunta = element.dataValues.puntaje;
-                if(element.dataValues.alternativas.length > 0 ){
-                    if(element.dataValues.alternativas[0].opcion == 'correcta'){
+
+
+                element.dataValues.alternativas.forEach(alt => {
+                    if(alt.dataValues.opcion == 'correcta' && alt.dataValues.respuesta_cuestionarios.length > 0){
                         preguntas_correctas = preguntas_correctas + 1;
                         suma_puntaje = suma_puntaje + puntaje_pregunta;
-                    }else{
-                        suma_puntaje = suma_puntaje + 0;
                     }
-                }else{
-                    suma_puntaje = suma_puntaje + 0;
-                }
+                })
+
                 
             });
 

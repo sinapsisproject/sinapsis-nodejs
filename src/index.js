@@ -11,6 +11,7 @@ import './models/text.model.js';
 import './models/questionary.model.js';
 import './models/question.model.js';
 import './models/type_user.model.js';
+import './models/country.model.js';
 import './models/user.model.js';
 import './models/address.model.js';
 import './models/comuna.model.js';

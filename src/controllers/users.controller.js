@@ -7,7 +7,7 @@ import { user_course } from '../models/user_course.model.js';
 
 const registerUser = async(req , res) => {
     
-    const {nombre, username, email , fecha_nacimiento ,telefono, password, estado, id_tipo_usuario } = req.body;
+    const {nombre, username, email , fecha_nacimiento ,telefono, pais ,password, estado, id_tipo_usuario } = req.body;
 
      /** Verificamos que el usuario ingrese el email y el password */
      if(
@@ -15,6 +15,7 @@ const registerUser = async(req , res) => {
      && typeof username !== 'undefined' && username !== null && username !== ""
      && typeof email !== 'undefined' && email !== null && email !== ""
      && typeof fecha_nacimiento !== 'undefined' && fecha_nacimiento !== null && fecha_nacimiento !== ""
+     && typeof pais !== 'undefined' && pais !== null && pais !== ""
      && typeof telefono !== 'undefined' && telefono !== null && telefono !== ""
      && typeof password !== 'undefined' && password !== null && password !== ""
      && typeof estado !== 'undefined' && estado !== null && estado !== ""
@@ -50,6 +51,7 @@ const registerUser = async(req , res) => {
                     username, 
                     email,
                     fecha_nacimiento, 
+                    pais,
                     telefono, 
                     password : password_encrypt, 
                     estado,

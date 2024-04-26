@@ -17,5 +17,6 @@ router.use(function (req, res, next) {
 
 router.post("/create" , validarToken , payController.createTransaction);
 router.get("/validate" , payController.validateTransaction);
+router.get("/data_order/:id" , payController.getDataPagoOkByOrder);
 
 export default router;

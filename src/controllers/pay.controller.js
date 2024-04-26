@@ -4,6 +4,7 @@ const {WebpayPlus} = pkg;
 import { order } from '../models/orders.model.js';
 import { course } from '../models/course.model.js';
 import { user_course } from '../models/user_course.model.js';
+import { user } from '../models/user.model.js';
 
 const createTransaction = async(req , res)=>{
 
@@ -121,34 +122,95 @@ const validateTransaction = async(req , res)=>{
           }
         }
         ).then((result) => {
-          res.redirect(process.env.DOMAIN_SITE+'/mi-perfil/');
+          res.redirect(process.env.DOMAIN_SITE+'/pago-ok/?order='+order_number);
         })
         .catch((error) =>{
-          res.redirect(process.env.DOMAIN_SITE+'/error/');  
+          res.redirect(process.env.DOMAIN_SITE+'/pago-error/');  
         });
 
       }else{
-        res.redirect(process.env.DOMAIN_SITE+'/error/'); 
+        res.redirect(process.env.DOMAIN_SITE+'/pago-error/'); 
       }
 
       
     }else{
-      res.redirect(process.env.DOMAIN_SITE+'/error/');
+      res.redirect(process.env.DOMAIN_SITE+'/pago-error/');
     }
 
   } else if (!token && !tbkToken) {//Segundo caso (El pago fue anulado por tiempo de espera)
-    res.redirect(process.env.DOMAIN_SITE+'/error/');
+    res.redirect(process.env.DOMAIN_SITE+'/pago-error/');
   } else if (!token && tbkToken) {//Tercer caso (El pago fue anulado por el usuario.)
-    res.redirect(process.env.DOMAIN_SITE+'/error/');
+    res.redirect(process.env.DOMAIN_SITE+'/pago-error/');
   } else if (token && tbkToken) {//Cuarto caso (El pago es inválido.)
-    res.redirect(process.env.DOMAIN_SITE+'/error/');
+    res.redirect(process.env.DOMAIN_SITE+'/pago-error/');
   }
     
   
 }
 
 
+const getDataPagoOkByOrder = async(req , res)=>{
+
+    const { id } = req.params;
+
+    try {
+
+      const dataUser  = await order.findAll({
+        where: {
+            id : id
+        },
+        attributes : ["id" , "id_usuario" , "estado", "createdAt"],
+        include : [
+          {
+            model: user,
+            attributes: ["id" , "nombre" , "email"]
+          }
+        ]
+
+      });
+
+
+      const dataCurso  = await order.findAll({
+        where: {
+            id : id
+        },
+        attributes : ["id" , "id_curso" , "estado"],
+        include : [
+          {
+            model: course,
+            attributes: ["id" , "nombre" , "precio", "imagen"]
+          }
+        ]
+
+      });
+
+      let object = {};
+      object.orden = dataUser[0].dataValues.id;
+      object.fecha = dataUser[0].dataValues.createdAt;
+      object.usuario = dataUser[0].dataValues.usuario.dataValues;
+      object.curso = dataCurso[0].dataValues.curso.dataValues;
+
+
+      res.json({
+        "status" : true,
+        "response" : object
+      })
+
+    } catch (error) {
+       res.json({
+            "status" : false,
+            "msg"    : 'Error al ejecutar la consulta',
+            "error"  : error
+        })
+    }
+
+}
+
+
+
+
   export const methods = {
     createTransaction,
-    validateTransaction
+    validateTransaction,
+    getDataPagoOkByOrder
 }

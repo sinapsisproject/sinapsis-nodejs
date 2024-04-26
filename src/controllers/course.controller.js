@@ -15,6 +15,8 @@ import { alternative } from "../models/alternativa.model.js";
 import { questions_foro } from "../models/questions_foro.model.js";
 import { response_foro } from "../models/response_foro.js";
 import { progress } from "../models/progress.model.js";
+import { user } from "../models/user.model.js"
+import { response_questionary } from "../models/response_questionary.model.js";
 
 
 
@@ -83,25 +85,135 @@ const getCoursesByIdUser = async(req , res) => {
         
         const { id } = req.params;
 
-        const courses = await user_course.findAll({
+        const dataUser = await user.findAll({
             where: {
-                id_usuario: id
+                id : id
             },
-            include: [
+            attributes : ["id","nombre","email","estado"],
+            include : [
                 {
-                    model : course,
-                    include: [module]
+                    model: user_course,
+                    attributes: ["id", "estado"],
+                    include: [
+                        {
+                            model: course,
+                            attributes: ["id","nombre"],
+                            include: [
+                                {
+                                    model: module,
+                                    attributes: ["id" , "nombre"],
+                                    include: [
+                                        {
+                                            model: video,
+                                            attributes: ["id" , "nombre"]
+                                        },
+                                        {
+                                            model: note,
+                                            attributes: ["id" , "nombre"]
+                                        },
+                                        {
+                                            model: text,
+                                            attributes: ["id" , "nombre"]
+                                        },
+                                        {
+                                            model: questionary,
+                                            attributes: ["id" , "nombre" , "clase"]
+                                        },
+                                        {
+                                            model: foro,
+                                            attributes: ["id" , "nombre"]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         });
-        res.json(courses);
+
+
+        const object_user = {
+            "nombre" : dataUser[0].dataValues.nombre,
+            "email"  : dataUser[0].dataValues.email
+        }
+
+      
+        let count = 0;
+        let modulos = [];
+        let data = {};
+        let cursos = [];
+    
+        await Promise.all(
+            dataUser[0].dataValues.usuario_cursos.map(async (element) => {
+
+                let item_realizados = await progress.count({
+                    where: {
+                        id_usuario: id,
+                        id_curso: element.dataValues.curso.dataValues.id
+                    }
+                });
+
+                data.id = element.dataValues.curso.dataValues.id;
+                data.nombre = element.dataValues.curso.dataValues.nombre;
+
+                element.dataValues.curso.dataValues.modulos.forEach(modulo => {
+                   modulos.push(modulo.dataValues.nombre);
+                   count = count + modulo.dataValues.videos.length;
+                   count = count + modulo.dataValues.apuntes.length;
+                   count = count + modulo.dataValues.textos.length;
+    
+                   //contabilizamos todos los cuestionarios menos el recuperativo
+                   modulo.dataValues.cuestionarios.forEach(cuestionario => {
+                        if(cuestionario.dataValues.clase != "recuperativa"){
+                            count = count + 1;
+                        }
+                   });
+                   
+                });
+    
+                let progress_porcentage = (item_realizados * 100) / (count - 1);
+
+                data.modulos = modulos;
+                data.total_items = count;
+                data.progreso_items = item_realizados;
+                data.porcentaje_progreso = progress_porcentage;
+
+    
+                modulos = [];
+                count = 0;
+    
+                cursos.push(data);
+
+            })
+        )
+
+
+        object_user.cursos = cursos;
+
+        let cursos_terminados = 0;
+        cursos.forEach(curso => {
+            if(curso.porcentaje_progreso >= 100){
+                cursos_terminados++;
+            }
+        });
+
+        object_user.cantidad_cursos = cursos.length;
+        object_user.cursos_terminados = cursos_terminados;
+
+        
+        res.json({
+            "status" : true,
+            "response" : object_user
+        })
+
 
     } catch (error) {
         res.json({
-            "status" : false,
-            "msg"    : 'Error en la consulta',
-            "error"  : error
-        })
+                    "status" : false,
+                    "msg"    : 'Error en la consulta',
+                    "error"  : error
+                })
     }
 
 }

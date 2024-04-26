@@ -80,7 +80,7 @@ const progressData = async(req , res) => {
     res.json({
         "status" : true,
         "items" : count,
-        "total_items" : parseInt(total_progress),
+        "total_items" : parseInt(total_progress-1),
         "porcentaje" : parseInt(progress_porcentage)
     });
 

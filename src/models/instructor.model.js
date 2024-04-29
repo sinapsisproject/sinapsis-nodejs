@@ -15,6 +15,9 @@ export const instructor = sequelize.define('instructor', {
     especialidad: {
         type: DataTypes.STRING
     },
+    cargo: {
+        type: DataTypes.STRING
+    },
     descripcion: {
         type: DataTypes.TEXT
     },

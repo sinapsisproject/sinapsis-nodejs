@@ -22,21 +22,27 @@ import { response_questionary } from "../models/response_questionary.model.js";
 
 const createCourse = async(req , res) => {
     
-    const {nombre, descripcion, link_video , link_programa, estado, id_tipo_curso, imagen ,precio, metodologia, duracion } = req.body;
+    const {nombre, descripcion, descripcion_corta, link_video , link_programa, estado, id_tipo_curso, imagen ,precio, objetivo ,segmento , estudiantes, metodologia, duracion, nota_aprobacion, id_instructor } = req.body;
 
     try {
      
         const newCourse = await course.create({
-            nombre, 
-            descripcion, 
-            link_video, 
-            link_programa, 
-            estado, 
-            id_tipo_curso,
+            nombre,
+            descripcion,
+            descripcion_corta,
+            link_video,
+            link_programa,
+            estado,
             imagen,
             precio,
+            objetivo,
+            segmento,
+            estudiantes,
             metodologia,
-            duracion
+            duracion,
+            nota_aprobacion,
+            id_instructor,
+            id_tipo_curso,
         });
 
         res.json(newCourse);

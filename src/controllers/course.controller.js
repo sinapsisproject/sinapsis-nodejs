@@ -139,6 +139,10 @@ const getCoursesByIdUser = async(req , res) => {
         });
 
 
+        
+
+
+
         const object_user = {
             "nombre" : dataUser[0].dataValues.nombre,
             "email"  : dataUser[0].dataValues.email
@@ -163,20 +167,25 @@ const getCoursesByIdUser = async(req , res) => {
                 data.id = element.dataValues.curso.dataValues.id;
                 data.nombre = element.dataValues.curso.dataValues.nombre;
 
-                element.dataValues.curso.dataValues.modulos.forEach(modulo => {
-                   modulos.push(modulo.dataValues.nombre);
-                   count = count + modulo.dataValues.videos.length;
-                   count = count + modulo.dataValues.apuntes.length;
-                   count = count + modulo.dataValues.textos.length;
-    
-                   //contabilizamos todos los cuestionarios menos el recuperativo
-                   modulo.dataValues.cuestionarios.forEach(cuestionario => {
-                        if(cuestionario.dataValues.clase != "recuperativa"){
-                            count = count + 1;
-                        }
-                   });
-                   
-                });
+                await Promise.all(
+                    element.dataValues.curso.dataValues.modulos.map(async (modulo) => {
+                        modulos.push(modulo.dataValues.nombre);
+                        count = count + modulo.dataValues.videos.length;
+                        count = count + modulo.dataValues.apuntes.length;
+                        count = count + modulo.dataValues.textos.length;
+         
+                        //contabilizamos todos los cuestionarios menos el recuperativo
+                        await Promise.all(
+                            modulo.dataValues.cuestionarios.map(async (cuestionario) =>{
+                                if(cuestionario.dataValues.clase != "recuperativa"){
+                                    count = count + 1;
+                                }
+                            })
+                        )
+                        
+                    })
+                )
+
     
                 let progress_porcentage = (item_realizados * 100) / (count - 1);
 
@@ -184,16 +193,15 @@ const getCoursesByIdUser = async(req , res) => {
                 data.total_items = count;
                 data.progreso_items = item_realizados;
                 data.porcentaje_progreso = progress_porcentage;
-
     
                 modulos = [];
                 count = 0;
     
                 cursos.push(data);
+                data = {};
 
             })
         )
-
 
         object_user.cursos = cursos;
 

@@ -21,6 +21,7 @@ import response_questionaryRoutes from "./routes/response_questionary.route.js";
 import progressRoutes from "./routes/progress.routes.js";
 import payRoutes from "./routes/pay.routes.js";
 import activecampaign from "./routes/activecampaign.routes.js";
+import objectiveRoutes from "./routes/objective.routes.js";
 
 const app = express();
 
@@ -50,5 +51,6 @@ app.use('/api/response_questionary', response_questionaryRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/pay' , payRoutes);
 app.use('/api/activecampaign' , activecampaign);
+app.use('/api/objective' , objectiveRoutes);
 
 export default app;

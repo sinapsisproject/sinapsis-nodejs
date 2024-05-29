@@ -12,6 +12,7 @@ router.get("/get_course_by_id_user/:id" , validarToken, courseController.getCour
 router.get("/get_course_by_id_free_data/:id" , courseController.getCourseByIdFreeData);
 router.get("/get_content_course/:id" , courseController.getContentCourse);
 router.get("/get_course_by_id_instructor/:id" , courseController.getCourseByIdInstructor);
+router.get("/get_modules_and_objectives_by_id_module/:id" , courseController.getModulesAndObjectivesByIdModule);
 
 
 router.get("/get_course_by_id/:id" , validarToken, validate_course, courseController.getCourseById);

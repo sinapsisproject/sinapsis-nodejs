@@ -17,6 +17,7 @@ import { response_foro } from "../models/response_foro.js";
 import { progress } from "../models/progress.model.js";
 import { user } from "../models/user.model.js"
 import { response_questionary } from "../models/response_questionary.model.js";
+import { objective } from "../models/objectives.model.js";
 
 
 
@@ -525,7 +526,43 @@ const getContentCourse= async(req , res) => {
 
 }
 
+const getModulesAndObjectivesByIdModule = async(req , res) => {
+    try {
+        
+        const { id } = req.params;
 
+        const info_cursos = await course.findAll({
+            where: {
+                id : id
+            },
+            attributes : ['id', 'nombre'],
+            include: [
+                {
+                    model : module,
+                    attributes : ['id','nombre','ubicacion'],
+                    include : [
+                        {
+                            model: objective,
+                            attributes : ['id', 'texto']
+                        }
+                    ]
+                }
+            ],
+            order: [
+                [module, 'ubicacion', 'ASC'], 
+                [module, objective, 'id', 'ASC']
+            ]
+        });
+        res.json(info_cursos);
+
+    } catch (error) {
+        res.json({
+            "status" : false,
+            "msg"    : 'Error al ejecutar la consulta',
+            "error"  : error
+        })
+    }
+}
 
 
 const getCourseByIdInstructor = async(req , res) => {
@@ -563,5 +600,6 @@ export const methods = {
     getCourseById,
     getCourseByIdFreeData,
     getContentCourse,
-    getCourseByIdInstructor
+    getCourseByIdInstructor,
+    getModulesAndObjectivesByIdModule
 }

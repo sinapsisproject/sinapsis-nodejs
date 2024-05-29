@@ -7,6 +7,7 @@ import './models/instructor.model.js';
 import './models/course.model.js';
 import './models/module.model.js';
 import './models/video.model.js';
+import './models/objectives.model.js';
 import './models/text.model.js';
 import './models/questionary.model.js';
 import './models/question.model.js';

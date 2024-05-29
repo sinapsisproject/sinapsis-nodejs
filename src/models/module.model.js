@@ -6,6 +6,7 @@ import { note } from './note.model.js';
 import { text } from './text.model.js';
 import { questionary } from './questionary.model.js';
 import { foro } from './foro.model.js';
+import { objective } from './objectives.model.js';
 
 export const module = sequelize.define('modulo', {
     id: {
@@ -73,6 +74,17 @@ module.hasMany(foro, {
 });
 
 foro.belongsTo(module , {
+    foreignKey: 'id_modulo',
+    targetId: 'id'
+});
+
+
+module.hasMany(objective, {
+    foreignKey: 'id_modulo',
+    sourceKey: 'id'
+});
+
+objective.belongsTo(module , {
     foreignKey: 'id_modulo',
     targetId: 'id'
 });

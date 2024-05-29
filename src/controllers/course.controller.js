@@ -553,7 +553,7 @@ const getModulesAndObjectivesByIdModule = async(req , res) => {
                 [module, objective, 'id', 'ASC']
             ]
         });
-        res.json(info_cursos);
+        res.json(info_cursos[0]);
 
     } catch (error) {
         res.json({

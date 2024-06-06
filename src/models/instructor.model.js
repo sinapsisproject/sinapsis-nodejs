@@ -21,6 +21,9 @@ export const instructor = sequelize.define('instructor', {
     descripcion: {
         type: DataTypes.TEXT
     },
+    descripcion_corta: {
+        type: DataTypes.TEXT
+    },
     foto: {
         type: DataTypes.TEXT
     }

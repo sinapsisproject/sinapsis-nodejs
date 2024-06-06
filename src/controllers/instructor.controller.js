@@ -2,7 +2,7 @@ import { instructor } from "../models/instructor.model.js";
 
 const createInstructor = async(req , res) => {
     
-    const {nombre, especialidad, cargo, descripcion, foto} = req.body;
+    const {nombre, especialidad, cargo, descripcion, descripcion_corta, foto} = req.body;
 
     try {
      
@@ -10,6 +10,7 @@ const createInstructor = async(req , res) => {
             nombre, 
             especialidad,
             descripcion,
+            descripcion_corta,
             cargo,
             foto
         });

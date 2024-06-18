@@ -22,7 +22,7 @@ export const course = sequelize.define('curso', {
         type: DataTypes.TEXT
     },
     link_video: {
-        type: DataTypes.STRING(500)
+        type: DataTypes.STRING(900)
     },
     link_programa: {
         type: DataTypes.STRING(500)

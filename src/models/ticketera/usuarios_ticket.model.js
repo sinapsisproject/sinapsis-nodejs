@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import { sequelize } from '../../database/database.js'
 
 import { orden_ticket } from '../../models/ticketera/orden_ticket.model.js'
+import { pack } from './pack.model.js';
 
 export const usuarios_ticket = sequelize.define('usuarios_ticket', {
     id: {
@@ -15,14 +16,14 @@ export const usuarios_ticket = sequelize.define('usuarios_ticket', {
     apellido: {
         type: DataTypes.STRING
     },
+    correo_electronico: {
+        type : DataTypes.STRING
+    },
     fecha_nacimiento: {
-        type : DataTypes.DATE
+        type: DataTypes.DATE
     },
-    pais: {
-        type: DataTypes.STRING
-    },
-    rut_dni: {
-        type: DataTypes.STRING
+    id_pais: {
+        type: DataTypes.INTEGER
     },
     telefono: {
         type: DataTypes.STRING
@@ -30,24 +31,23 @@ export const usuarios_ticket = sequelize.define('usuarios_ticket', {
     ocupacion: {
         type: DataTypes.STRING
     },
-    link_certificado: {
-        type: DataTypes.TEXT
-    },
     lugar_de_desempeño: {
         type: DataTypes.STRING
     }
+    
 });
 
 
 usuarios_ticket.hasMany(orden_ticket, {
-    foreignKey: 'id_usuario_ticket',
+    as: 'ot',
+    foreignKey: 'id_usuario',
     sourceKey: 'id'
 });
 
 orden_ticket.belongsTo(usuarios_ticket , {
-    foreignKey: 'id_usuario_ticket',
+    as: 'ot',
+    foreignKey: 'id_usuario',
     targetId: 'id'
 });
-
 
 

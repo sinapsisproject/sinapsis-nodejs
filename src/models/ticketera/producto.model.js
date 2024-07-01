@@ -1,8 +1,7 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../database/database.js'
-
-import { pack } from '../../models/ticketera/pack.model.js'
-import { precio } from '../../models/ticketera/precio.model.js'
+import { sequelize } from '../../database/database.js';
+import { unidades } from './unidades.model.js';
+import { precio } from './precio.model.js'; 
 
 export const producto_ticket = sequelize.define('producto_ticket', {
     id: {
@@ -18,26 +17,26 @@ export const producto_ticket = sequelize.define('producto_ticket', {
     }
 });
 
-
-producto_ticket.hasMany(pack, {
-    foreignKey: 'id_producto_ticket',
+producto_ticket.hasMany(unidades, {
+    as: 'ud',
+    foreignKey: 'id_producto',
     sourceKey: 'id'
 });
 
-pack.belongsTo(producto_ticket , {
-    foreignKey: 'id_producto_ticket',
-    targetId: 'id'
+unidades.belongsTo(producto_ticket, {
+    as: 'pt',
+    foreignKey: 'id_producto',
+    targetKey: 'id'
 });
-
 
 producto_ticket.hasMany(precio, {
-    foreignKey: 'id_producto_ticket',
+    as: 'pre',
+    foreignKey: 'id_producto',
     sourceKey: 'id'
 });
 
-precio.belongsTo(producto_ticket , {
-    foreignKey: 'id_producto_ticket',
-    targetId: 'id'
+precio.belongsTo(producto_ticket, {
+    as: 'pt',
+    foreignKey: 'id_producto',
+    targetKey: 'id'
 });
-
-

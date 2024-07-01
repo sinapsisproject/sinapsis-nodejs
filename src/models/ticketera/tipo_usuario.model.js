@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../database/database.js'
-
-import { tipo_producto_ticket } from './../ticketera/tipo_producto.model.js';
+import { sequelize } from '../../database/database.js';
+import { caracteristica } from './../ticketera/caracteristica.model.js';
 import { usuarios_ticket } from './../ticketera/usuarios_ticket.model.js';
+import { pack } from './../ticketera/pack.model.js';
+import { precio } from './precio.model.js';
 
 export const tipo_usuario_ticket = sequelize.define('tipo_usuario_ticket', {
     id: {
@@ -18,24 +19,50 @@ export const tipo_usuario_ticket = sequelize.define('tipo_usuario_ticket', {
     }
 });
 
-
-tipo_usuario_ticket.hasMany(tipo_producto_ticket, {
-    foreignKey: 'id_tipo_usuario_ticket',
+tipo_usuario_ticket.hasMany(caracteristica, {
+    as: 'car',
+    foreignKey: 'id_tipo_usuario',
     sourceKey: 'id'
 });
 
-tipo_producto_ticket.belongsTo(tipo_usuario_ticket , {
-    foreignKey: 'id_tipo_usuario_ticket',
-    targetId: 'id'
+caracteristica.belongsTo(tipo_usuario_ticket, {
+    as: 'tut',
+    foreignKey: 'id_tipo_usuario',
+    targetKey: 'id'
 });
 
 tipo_usuario_ticket.hasMany(usuarios_ticket, {
-    foreignKey: 'id_tipo_usuario_ticket',
+    as: 'ut',
+    foreignKey: 'id_tipo_usuario',
     sourceKey: 'id'
 });
 
-usuarios_ticket.belongsTo(tipo_usuario_ticket , {
-    foreignKey: 'id_tipo_usuario_ticket',
-    targetId: 'id'
+usuarios_ticket.belongsTo(tipo_usuario_ticket, {
+    as: 'tut',
+    foreignKey: 'id_tipo_usuario',
+    targetKey: 'id'
 });
 
+tipo_usuario_ticket.hasMany(pack, {
+    as: 'pa',
+    foreignKey: 'id_tipo_usuario',
+    sourceKey: 'id'
+});
+
+pack.belongsTo(tipo_usuario_ticket, {
+    as: 'tut',
+    foreignKey: 'id_tipo_usuario',
+    targetKey: 'id'
+});
+
+tipo_usuario_ticket.hasMany(precio, {
+    as: 'pre',
+    foreignKey: 'id_tipo_usuario',
+    sourceKey: 'id'
+});
+
+precio.belongsTo(tipo_usuario_ticket, {
+    as: 'tut',
+    foreignKey: 'id_tipo_usuario',
+    targetKey: 'id'
+});

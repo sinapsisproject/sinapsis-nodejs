@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../../database/database.js'
-
-import { pack } from '../../models/ticketera/pack.model.js'
+import { sequelize } from '../../database/database.js';
+import { caracteristica } from '../../models/ticketera/caracteristica.model.js';
+import { pack } from '../../models/ticketera/pack.model.js';
 
 export const tipo_producto_ticket = sequelize.define('tipo_producto_ticket', {
     id: {
@@ -14,24 +14,31 @@ export const tipo_producto_ticket = sequelize.define('tipo_producto_ticket', {
     },
     estado: {
         type: DataTypes.STRING
-    },
-    cant_curso_presencial: {
-        type : DataTypes.INTEGER
-    },
-    cant_curso_online: {
-        type: DataTypes.INTEGER
     }
 });
 
-
-tipo_producto_ticket.hasMany(pack, {
-    foreignKey: 'id_tipo_producto_ticket',
+tipo_producto_ticket.hasMany(caracteristica, {
+    as: 'car',
+    foreignKey: 'id_tipo_producto',
     sourceKey: 'id'
 });
 
-pack.belongsTo(tipo_producto_ticket , {
-    foreignKey: 'id_tipo_producto_ticket',
-    targetId: 'id'
+caracteristica.belongsTo(tipo_producto_ticket, {
+    as: 'tpt',
+    foreignKey: 'id_tipo_producto',
+    targetKey: 'id'
+});
+
+tipo_producto_ticket.hasMany(pack, {
+    as: 'pa',
+    foreignKey: 'id_tipo_producto',
+    sourceKey: 'id'
+});
+
+pack.belongsTo(tipo_producto_ticket, {
+    as: 'tpt',
+    foreignKey: 'id_tipo_producto',
+    targetKey: 'id'
 });
 
 

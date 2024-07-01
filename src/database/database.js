@@ -1,5 +1,9 @@
 import Sequalize from 'sequelize'
+import debug from 'debug';
 import config from "../config.js";
+
+const debugSequelize = debug('sequelize');
+
 
 export const sequelize = new Sequalize({
   dialect: 'postgres',
@@ -8,5 +12,5 @@ export const sequelize = new Sequalize({
   username: config.user,
   password: config.password,
   database: config.database,
-  logging: false // Opcional: deshabilita los registros de consultas SQL
+  logging: true
 });

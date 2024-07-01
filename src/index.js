@@ -21,17 +21,21 @@ import './models/user_course.model.js';
 import './models/response_questionary.model.js';
 
 import './models/ticketera/tipo_usuario.model.js';
+import './models/ticketera/caracteristica.model.js';
 import './models/ticketera/tipo_producto.model.js';
-import './models/ticketera/producto.model.js';
 import './models/ticketera/pack.model.js';
-import './models/ticketera/precio.model.js';
+import './models/ticketera/unidades.model.js';
+import './models/ticketera/producto.model.js';
 import './models/ticketera/usuarios_ticket.model.js';
 import './models/ticketera/orden_ticket.model.js';
 import './models/ticketera/item_ticket.model.js';
+import './models/ticketera/precio.model.js';
+import './models/ticketera/tipo_precio.model.js';
+import './models/ticketera/paypal.model.js';
 
 const main=async ()=>{
     try {
-        await sequelize.sync({alter: true});
+        //await sequelize.sync({alter: true});
         await sequelize.authenticate();
         console.log("Connection has been established successfully.");
         app.listen(app.get("port"));

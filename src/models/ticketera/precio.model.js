@@ -7,13 +7,7 @@ export const precio = sequelize.define('precio', {
         primaryKey: true,
         autoIncrement: true
     },
-    nombre_precio: {
-        type: DataTypes.STRING
-    },
     valor: {
         type: DataTypes.INTEGER
-    },
-    estado: {
-        type : DataTypes.INTEGER
     }
 });

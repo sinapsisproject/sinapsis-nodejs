@@ -23,6 +23,10 @@ import payRoutes from "./routes/pay.routes.js";
 import activecampaign from "./routes/activecampaign.routes.js";
 import objectiveRoutes from "./routes/objective.routes.js";
 
+import ticketRoutes from "./routes/ticketera/productos_ticket.routes.js";
+import paypalRoutes from "./routes/paypal.routes.js";
+import webpayRoutes from "./routes/webpay.routes.js";
+
 const app = express();
 
 //settings
@@ -52,5 +56,9 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/pay' , payRoutes);
 app.use('/api/activecampaign' , activecampaign);
 app.use('/api/objective' , objectiveRoutes);
+
+app.use('/api/ticket' , ticketRoutes);
+app.use('/api/paypal' , paypalRoutes);
+app.use('/api/webpay' , webpayRoutes);
 
 export default app;

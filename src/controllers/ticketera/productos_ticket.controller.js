@@ -12,6 +12,9 @@ import { orden_ticket } from "../../models/ticketera/orden_ticket.model.js";
 import { item_ticket } from "../../models/ticketera/item_ticket.model.js";
 
 import nodemailer from 'nodemailer';
+import path from 'path';
+import fs  from 'fs';
+import { fileURLToPath } from 'url';
 
 
 const getDataByTypeUser = async(req , res) => {
@@ -343,37 +346,47 @@ const getUserTicketById = async(req , res) => {
 
 const sendMailUserTicket = async(req , res) => {
 
-    const {  } = req.body;
+    const { mail } = req.body;
 
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
 
-    const transporter = nodemailer.createTransport({
-        service: 'gmail', // Puedes usar otros servicios como Yahoo, Outlook, etc.
-        auth: {
-            user: 'contacto@sinapsisclinica.com', // Tu correo electrónico
-            pass: 'bevc zfqq hhly xtkh' // Tu contraseña
+    const htmlPath = path.join(__dirname, 'assets', 'templates', 'mail_pay.html');
+
+    fs.readFile(htmlPath, 'utf8', (err, html) => {
+        if (err) {
+            return res.status(500).send('Error al leer el archivo HTML');
+        }else{
+            const transporter = nodemailer.createTransport({
+                service: 'gmail', // Puedes usar otros servicios como Yahoo, Outlook, etc.
+                auth: {
+                    user: 'contacto@sinapsisclinica.com', // Tu correo electrónico
+                    pass: 'bevc zfqq hhly xtkh' // Tu contraseña
+                }
+            });
+
+            const mailOptions = {
+                from: 'contacto@sinapsisclinica.com', // Dirección del remitente
+                to: mail, // Dirección del destinatario
+                subject: '¡Felicitaciones! Ya estás inscrito en el curso de Endocrinología y Diabetología Hospitalaria', // Asunto del correo
+                //text: 'Contenido del correo en texto plano', // Cuerpo del correo en texto plano
+                html: html 
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Correo enviado: ' + info.response);
+                res.json({
+                    "status"        : true,
+                    "response"      : "Correo enviado"
+                 });
+            });
+
         }
     });
 
-    const mailOptions = {
-        from: 'contacto@sinapsisclinica.com', // Dirección del remitente
-        to: 'diego.icinf@gmail.com', // Dirección del destinatario
-        subject: 'Asunto del correo', // Asunto del correo
-        text: 'Contenido del correo en texto plano', // Cuerpo del correo en texto plano
-        html: '<img width="160" height="40" src="https://sinapsisclinica.com/wp-content/uploads/2023/09/Diseno-sin-titulo-1.png" class="attachment-large size-large wp-image-3372">' // Cuerpo del correo en HTML (opcional)
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Correo enviado: ' + info.response);
-    });
-
-
-    res.json({
-        "status"        : true,
-        "response"      : "hola"
-     });
 
 }
 

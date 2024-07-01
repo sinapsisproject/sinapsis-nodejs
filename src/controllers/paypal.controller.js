@@ -1,9 +1,16 @@
 import { paypalTransactionLog } from './../models/ticketera/paypal.model.js';
 import { orden_ticket } from './../models/ticketera/orden_ticket.model.js';
+import { usuarios_ticket } from './../models/ticketera/usuarios_ticket.model.js';
 import paypal from 'paypal-rest-sdk';
 import { config } from 'dotenv';
 import { item_ticket } from '../models/ticketera/item_ticket.model.js';
 import { user_course } from '../models/user_course.model.js';
+
+import nodemailer from 'nodemailer';
+import path from 'path';
+import fs  from 'fs';
+import { fileURLToPath } from 'url';
+
 
 config();
 
@@ -177,6 +184,55 @@ const successPay = async(req , res) => {
         console.error('Error al actualizar la orden:', error);
       }
       res.redirect(process.env.DOMAIN_SITE+'/ok-pago/?order='+id_orden);
+
+
+      //** ENVÍO DE CORREO ELECTRÓNICO (ARREGLAR ESTA WEA) */
+
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+
+      const htmlPath = path.join(__dirname, 'ticketera' , 'assets', 'templates', 'mail_pay.html');
+
+      fs.readFile(htmlPath, 'utf8', async(err, html) => {
+
+          if (err) {
+              return res.status(500).send('Error al leer el archivo HTML');
+          }else{
+
+            const dataUser = await usuarios_ticket.findByPk(id_usuario);
+
+              const transporter = nodemailer.createTransport({
+                  service: 'gmail', // Puedes usar otros servicios como Yahoo, Outlook, etc.
+                  auth: {
+                      user: 'contacto@sinapsisclinica.com', // Tu correo electrónico
+                      pass: 'bevc zfqq hhly xtkh' // Tu contraseña
+                  }
+              });
+
+              const mailOptions = {
+                  from: 'contacto@sinapsisclinica.com', // Dirección del remitente
+                  to: dataUser.correo_electronico, // Dirección del destinatario
+                  subject: '¡Felicitaciones! Ya estás inscrito en el curso de Endocrinología y Diabetología Hospitalaria', // Asunto del correo
+                  //text: 'Contenido del correo en texto plano', // Cuerpo del correo en texto plano
+                  html: html 
+              };
+
+              transporter.sendMail(mailOptions, (error, info) => {
+                  if (error) {
+                      return console.log(error);
+                  }
+                  console.log('Correo enviado: ' + info.response);
+                  res.json({
+                      "status"        : true,
+                      "response"      : "Correo enviado"
+                  });
+              });
+
+          }
+      });
+
+      //** ENVÍO DE CORREO ELECTRÓNICO (ARREGLAR ESTA WEA) */
+      
     }
   });
 }

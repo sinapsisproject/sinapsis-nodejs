@@ -112,7 +112,7 @@ const validateTransactionTicket = async(req , res)=>{
                     let dataUserCourse = {
                         "estado" : "activo",
                         "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                        "id_curso" : 1 //CAMBIAR
+                        "id_curso" : 7 //CAMBIAR
                     }
                     let userCourse = user_course.create(dataUserCourse);
                 }

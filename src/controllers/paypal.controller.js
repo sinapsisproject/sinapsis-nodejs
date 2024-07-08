@@ -169,7 +169,7 @@ const successPay = async(req , res) => {
               let dataUserCourse = {
                   "estado" : "activo",
                   "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                  "id_curso" : 7 //CAMBIAR
+                  "id_curso" : 13 //CAMBIAR
               }
               const userCourse = user_course.create(dataUserCourse);
           }

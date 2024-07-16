@@ -11,4 +11,7 @@ router.get("/get_order_by_id/:id" , productos_ticketController.getOrderById);
 router.get("/get_user_ticket_by_id/:id" , productos_ticketController.getUserTicketById);
 router.get("/send_mail_user_ticket" , productos_ticketController.sendMailUserTicket);
 
+
+router.get("/validar_codigo_descuento/:codigo" , productos_ticketController.validarCodigoDescuento);
+
 export default router;

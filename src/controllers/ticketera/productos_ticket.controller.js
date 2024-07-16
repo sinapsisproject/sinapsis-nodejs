@@ -12,9 +12,11 @@ import { orden_ticket } from "../../models/ticketera/orden_ticket.model.js";
 import { item_ticket } from "../../models/ticketera/item_ticket.model.js";
 
 import nodemailer from 'nodemailer';
+import { Op } from 'sequelize';
 import path from 'path';
 import fs  from 'fs';
 import { fileURLToPath } from 'url';
+import { codigo_descuento } from "../../models/ticketera/codigos_descuento.model.js";
 
 
 const getDataByTypeUser = async(req , res) => {
@@ -110,7 +112,7 @@ const getTypeUserTicket = async(req , res) => {
 
 const createOrderProducts = async(req , res) => {
 
-    const { idUserType , idPacks , dataUser } = req.body;
+    const { idUserType , idPacks , dataUser , promo_code} = req.body;
 
     const response = [];
 
@@ -196,18 +198,61 @@ const createOrderProducts = async(req , res) => {
         )
 
 
+        //PROMO CODE VALIDATION
+
+        let data_promo_code = [{"descuento" : 0 , "id_codigo_descuento" : null}];
+        if(promo_code != "" & promo_code != "undefined" ){
+
+            const res_promo_code = await codigo_descuento.findAll({
+                where : {
+                    codigo : promo_code,
+                    unidades : {
+                        [Op.gt] : 0
+                    }
+                },
+                attributes: ['id' , 'descuento', 'unidades']
+            });
+
+            data_promo_code = JSON.parse(JSON.stringify(res_promo_code, null, 2));
+
+            if(data_promo_code.length == 1){
+                
+                codigo_descuento.update(
+                    {
+                        unidades : parseInt(data_promo_code[0].unidades) - 1
+                    },
+                    {
+                        where : {
+                            id : data_promo_code[0].id
+                        }
+                    }
+                    ).then((result) => {
+                        console.log(result);
+                    })
+            }else{
+                data_promo_code = [{"descuento" : 0 , "id_codigo_descuento" : null}];
+            }
+
+        }
+
+        console.log("///////////////////////////////////////////////////////////");
+        console.log(data_promo_code[0]);
+        console.log("///////////////////////////////////////////////////////////");
+
+
         let dataCreateOrder = {
             "subtotal"  : total_pesos,
             "total"     : total_pesos,
             "total_dolares" : total_pesos / 1000,
             "estado" : "pending",
-            "descuento" : 0,
             "fecha" : dataUser.fecha,
             "medio_pago" : "",
             "plataforma_pago" : dataUser.plataforma_pago,
             "id_usuario" : dataUser.id_usuario,
             "id_tipo_usuario" : idUserType,
-            "id_usuario_sinapsis" : dataUser.id_usuario_sinapsis
+            "id_usuario_sinapsis" : dataUser.id_usuario_sinapsis,
+            "descuento" : data_promo_code[0].descuento,
+            "id_codigo_descuento": data_promo_code[0].id
         }
 
 
@@ -391,6 +436,42 @@ const sendMailUserTicket = async(req , res) => {
 }
 
 
+const validarCodigoDescuento = async(req , res) => {
+
+    const { codigo } = req.params;
+
+    const response = await codigo_descuento.findAll({
+        where : {
+            codigo : codigo
+        },
+        attributes: ['codigo', 'descuento', 'unidades']
+    });
+
+    const data = JSON.parse(JSON.stringify(response, null, 2));
+
+    if(data.length == 1){
+        res.json({
+            "status" : true,
+            "response" : response[0]
+        });
+    }else if(data.length == 0){
+        res.json({
+            "status" : false,
+            "error" : "El código no existe."
+        });
+    }else if(data.length > 1){
+        res.json({
+            "status" : false,
+            "error" : "El código está repetido, contactar con soporte."
+        });
+    }
+
+
+    
+
+}
+
+
 export const methods = {
     getDataByTypeUser,
     getTypeUserTicket,
@@ -398,5 +479,6 @@ export const methods = {
     registerUserTickets,
     getOrderById,
     getUserTicketById,
-    sendMailUserTicket
+    sendMailUserTicket,
+    validarCodigoDescuento
 }

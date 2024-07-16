@@ -17,6 +17,14 @@ const createTransactionTicket = async(req , res)=>{
 
     const response_orden_ticket = await orden_ticket.findByPk(id_orden);
 
+    let total_price = response_orden_ticket.total;
+    if(response_orden_ticket.descuento != 0){
+        const total_descuento = (response_orden_ticket.total * response_orden_ticket.descuento) / 100;
+        total_price     = response_orden_ticket.total - total_descuento;
+    }else{
+        total_price = response_orden_ticket.total;
+    }
+    
     const returnUrl = process.env.PROTOCOL+"://" + req.get("host") + "/api/webpay/validate_ticket";
 
     try {
@@ -24,7 +32,7 @@ const createTransactionTicket = async(req , res)=>{
         const createResponse = await (new WebpayPlus.Transaction()).create(
             "O-" +response_orden_ticket.id,
             "S-" +response_orden_ticket.id_usuario,
-            response_orden_ticket.total,
+            total_price,
             returnUrl
           );
 

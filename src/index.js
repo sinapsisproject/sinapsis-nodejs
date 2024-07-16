@@ -32,6 +32,7 @@ import './models/ticketera/item_ticket.model.js';
 import './models/ticketera/precio.model.js';
 import './models/ticketera/tipo_precio.model.js';
 import './models/ticketera/paypal.model.js';
+import './models/ticketera/codigos_descuento.model.js';
 
 const main=async ()=>{
     try {

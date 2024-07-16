@@ -31,6 +31,9 @@ export const usuarios_ticket = sequelize.define('usuarios_ticket', {
     ocupacion: {
         type: DataTypes.STRING
     },
+    certificado:{
+        type:DataTypes.TEXT
+    },
     lugar_de_desempeño: {
         type: DataTypes.STRING
     }

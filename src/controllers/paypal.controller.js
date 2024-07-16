@@ -32,7 +32,14 @@ const createOrder = async(req , res) => {
     });
 
     if(dataOrden[0]?.total_dolares){
-      monto = dataOrden[0]?.total_dolares;
+
+      if(dataOrden[0]?.descuento != 0){
+        let total_descuento = (dataOrden[0]?.total_dolares * dataOrden[0]?.descuento) / 100;
+        monto = dataOrden[0]?.total_dolares - total_descuento;
+      }else{
+        monto = dataOrden[0]?.total_dolares;
+      }
+
     }else{
       return res.json({
         "status" : false,

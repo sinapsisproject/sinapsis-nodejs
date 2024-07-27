@@ -155,30 +155,38 @@ const successPay = async(req , res) => {
       /*si el pago es exitoso actualizar el estado como "complete" en la tabla orden_ticket*/
       try {
 
-        const orderData = await orden_ticket.findByPk(id_orden, {
+        let orderData = await orden_ticket.findByPk(id_orden, {
             include : [
                 {
                     model : item_ticket,
                     as : "it",
                     where : {
-                        id_producto : 1
+                        id_producto : 1 //IDENTIFICADOR DE PRODUCTO CURSO ENDOCRINO
                     }
                 }
             ]
         })
 
+        if(orderData == null){
+          orderData = await orden_ticket.findByPk(order_number) 
+        }
+
         let jsonDataOrder = JSON.parse(JSON.stringify(orderData, null, 2));
+        // console.log("///jsonDataOrder///");
+        // console.log(jsonDataOrder);
 
         if(jsonDataOrder != null){
-          let item = jsonDataOrder.it;
-          let countItem = (item).length;
-          if(countItem == 1){
+          if(jsonDataOrder.it !== undefined){
+            let item = jsonDataOrder.it;
+            let countItem = (item).length;
+            if(countItem == 1){
               let dataUserCourse = {
                   "estado" : "activo",
                   "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                  "id_curso" : 13 //CAMBIAR
+                  "id_curso" : 1 //CAMBIAR13
               }
               const userCourse = user_course.create(dataUserCourse);
+            }
           }
         }
 

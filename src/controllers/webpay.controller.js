@@ -36,8 +36,8 @@ const createTransactionTicket = async(req , res)=>{
             returnUrl
           );
 
-        console.log("CREAR TRANSACCION");
-        console.log(createResponse);
+        //console.log("CREAR TRANSACCION");
+        //console.log(createResponse);
 
         if(createResponse.token && createResponse.url){
             const viewData  = {
@@ -81,10 +81,10 @@ const validateTransactionTicket = async(req , res)=>{
     let tbkOrdenCompra = params.TBK_ORDEN_COMPRA;
     let tbkIdSesion = params.TBK_ID_SESION;
 
-    console.log("TOKEN: "+token);
-    console.log("TBK_TOKEN: "+tbkToken);
-    console.log("TBK_ORDEN_COMPRA: "+tbkOrdenCompra);
-    console.log("TBK_ID_SESION: "+tbkIdSesion);
+    // console.log("TOKEN: "+token);
+    // console.log("TBK_TOKEN: "+tbkToken);
+    // console.log("TBK_ORDEN_COMPRA: "+tbkOrdenCompra);
+    // console.log("TBK_ID_SESION: "+tbkIdSesion);
 
     if (token && !tbkToken) {//Primer caso (exitoso)
         const commitResponse = await (new WebpayPlus.Transaction()).commit(token);
@@ -94,35 +94,38 @@ const validateTransactionTicket = async(req , res)=>{
             let splitOrder = commitResponse.buy_order.split('-');
             let order_number = parseInt(splitOrder[1]);
 
-            //ASOCIAMOS EL CURSO AL USUARIO
-
-            const orderData = await orden_ticket.findByPk(order_number, {
+            let orderData = await orden_ticket.findByPk(order_number, {
                 include : [
                     {
                         model : item_ticket,
                         as : "it",
                         where : {
-                            id_producto : 1
+                            id_producto : 1 //IDENTIFICADOR DE PRODUCTO CURSO ENDOCRINO
                         }
                     }
                 ]
             })
 
+            if(orderData == null){
+                orderData = await orden_ticket.findByPk(order_number) 
+            }
     
             let jsonDataOrder = JSON.parse(JSON.stringify(orderData, null, 2));
-
-            console.log(jsonDataOrder);
+            // console.log("///jsonDataOrder///");
+            // console.log(jsonDataOrder);
 
             if(jsonDataOrder != null){
-                let item = jsonDataOrder.it;
-                let countItem = (item).length;
-                if(countItem == 1){
-                    let dataUserCourse = {
-                        "estado" : "activo",
-                        "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                        "id_curso" : 13 //CURSO ENDROCRINOLOGIA
+                if(jsonDataOrder.it !== undefined){
+                    let item = jsonDataOrder.it;
+                    let countItem = (item).length;
+                    if(countItem == 1){
+                        let dataUserCourse = {
+                            "estado" : "activo",
+                            "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
+                            "id_curso" : 1 //CURSO ENDROCRINOLOGIA13
+                        }
+                        let userCourse = user_course.create(dataUserCourse);
                     }
-                    let userCourse = user_course.create(dataUserCourse);
                 }
             }
 
@@ -152,7 +155,10 @@ const validateTransactionTicket = async(req , res)=>{
                             return res.status(500).send('Error al leer el archivo HTML');
                         }else{
 
-                            const dataUser = await usuarios_ticket.findByPk(orderData.id_usuario);
+                            const dataUser = await usuarios_ticket.findByPk(jsonDataOrder.id_usuario);
+
+                            // console.log("///dataUser///");
+                            // console.log(dataUser);
 
                             const transporter = nodemailer.createTransport({
                                 service: 'gmail', // Puedes usar otros servicios como Yahoo, Outlook, etc.

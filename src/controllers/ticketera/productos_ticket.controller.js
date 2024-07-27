@@ -10,6 +10,7 @@ import { response } from "express";
 import { usuarios_ticket } from "../../models/ticketera/usuarios_ticket.model.js";
 import { orden_ticket } from "../../models/ticketera/orden_ticket.model.js";
 import { item_ticket } from "../../models/ticketera/item_ticket.model.js";
+import { user } from "../../models/user.model.js";
 
 import nodemailer from 'nodemailer';
 import { Op } from 'sequelize';
@@ -17,7 +18,7 @@ import path from 'path';
 import fs  from 'fs';
 import { fileURLToPath } from 'url';
 import { codigo_descuento } from "../../models/ticketera/codigos_descuento.model.js";
-
+import bcryptjs from 'bcryptjs';
 
 const getDataByTypeUser = async(req , res) => {
 
@@ -235,9 +236,9 @@ const createOrderProducts = async(req , res) => {
 
         }
 
-        console.log("///////////////////////////////////////////////////////////");
-        console.log(data_promo_code[0]);
-        console.log("///////////////////////////////////////////////////////////");
+        // console.log("///////////////////////////////////////////////////////////");
+        // console.log(data_promo_code[0]);
+        // console.log("///////////////////////////////////////////////////////////");
 
 
         let dataCreateOrder = {
@@ -464,11 +465,56 @@ const validarCodigoDescuento = async(req , res) => {
             "status" : false,
             "error" : "El código está repetido, contactar con soporte."
         });
-    }
+    } 
 
+}
 
+const loginUserTicket = async(req , res) => {
     
+    const { email , pass } = req.body;
 
+    try {
+        
+        const response_user = await user.findAll({
+            where: {
+                username: email
+            }
+        });
+
+        if(response_user.length > 0){
+
+            const validPassword =  bcryptjs.compareSync(pass, response_user[0].password);
+
+            if(validPassword){
+
+                const response_user_ticket = await usuarios_ticket.findAll({
+                    where: {
+                       correo_electronico : email
+                    }
+                });
+
+                res.json({
+                    "status" : true,
+                    "response_user_ticket" : response_user_ticket,
+                    "response_user" : response_user
+                });
+
+            }else{
+                res.json({
+                    "status" : false,
+                    "msg" : "Constraseña incorrecta"
+                });
+            }
+
+        }
+       
+
+    } catch (error) {
+        res.json({
+            "status"        : false,
+            "error"      : error
+         });
+    }
 }
 
 
@@ -480,5 +526,6 @@ export const methods = {
     getOrderById,
     getUserTicketById,
     sendMailUserTicket,
-    validarCodigoDescuento
+    validarCodigoDescuento,
+    loginUserTicket
 }

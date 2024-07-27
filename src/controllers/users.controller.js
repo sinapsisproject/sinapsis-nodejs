@@ -6,7 +6,7 @@ import { user_course } from '../models/user_course.model.js';
 
 
 const registerUser = async(req , res) => {
-    
+
     const {nombre, username, email , fecha_nacimiento ,telefono, pais ,password, estado, id_tipo_usuario } = req.body;
 
      /** Verificamos que el usuario ingrese el email y el password */

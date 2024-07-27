@@ -9,9 +9,10 @@ const createContact = async(req , res) => {
     try {
         const {contact , dataList} =  req.body;
 
-
         request({method: 'POST' , url: req.url_base+'contacts' , headers: req.headers , body : JSON.stringify({contact})} , function (error, response, body) {
             if (error) throw new Error(error);
+
+            console.log(JSON.parse(body));
 
             const lista = {
                 "contactList": {
@@ -56,10 +57,64 @@ const getContact = async(req , res) => {
             "response" : JSON.parse(body)
         })
       });
+}
+
+
+const sendMailTemplate = async(req, res) => {
+
+    const {mail} =  req.body;
+
+    request(
+        {
+            method: 'POST',
+            url: req.url_base+'contact/sync',
+            headers: req.headers, 
+            body : {
+                contact: {
+                    email: mail
+                }
+            },
+            json: true
+        } , function (error, response, body) 
+        {
+            if (error) throw new Error(error);
+      
+
+            let contactID = body.contact.id;
+
+
+            request(
+                {
+                    method: 'POST',
+                    url: req.url_base+'campaignEmails/send',
+                    headers: req.headers,
+                    body : {
+                        email: {
+                            campaign: 20,
+                            contact: contactID
+                        }
+                    },
+                    json: true
+                },function (error, response, body) 
+                {
+                    if (error) throw new Error(error);
+              
+                    res.json({
+                        "status" : true,
+                        "response" : body
+                    })
+            
+              });
+
+    
+        });
+
 
 }
 
+
 export const methods = {
     getContact,
-    createContact
+    createContact,
+    sendMailTemplate
 }

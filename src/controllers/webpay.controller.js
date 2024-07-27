@@ -122,7 +122,7 @@ const validateTransactionTicket = async(req , res)=>{
                         let dataUserCourse = {
                             "estado" : "activo",
                             "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                            "id_curso" : 1 //CURSO ENDROCRINOLOGIA13
+                            "id_curso" : 13 //CURSO ENDROCRINOLOGIA13
                         }
                         let userCourse = user_course.create(dataUserCourse);
                     }

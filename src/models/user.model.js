@@ -6,6 +6,7 @@ import { user_course } from './user_course.model.js';
 import { response_questionary } from './response_questionary.model.js';
 import { progress } from './progress.model.js';
 import { order } from './orders.model.js';
+import { respuesta_formulario } from './respuesta_formulario.model.js'; 
 
 export const user = sequelize.define('usuario', {
     id: {
@@ -82,6 +83,16 @@ user.hasMany(order, {
 });
 
 order.belongsTo(user , {
+    foreignKey: 'id_usuario',
+    targetId: 'id'
+});
+
+user.hasMany(respuesta_formulario, {
+    foreignKey: 'id_usuario',
+    sourceKey: 'id'
+});
+
+respuesta_formulario.belongsTo(user , {
     foreignKey: 'id_usuario',
     targetId: 'id'
 });

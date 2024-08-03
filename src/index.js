@@ -19,6 +19,9 @@ import './models/comuna.model.js';
 import './models/region.model.js';
 import './models/user_course.model.js';
 import './models/response_questionary.model.js';
+import './models/formulario.model.js';
+import './models/pregunta_formulario.model.js';
+import './models/respuesta_formulario.model.js';
 
 import './models/ticketera/tipo_usuario.model.js';
 import './models/ticketera/caracteristica.model.js';
@@ -33,6 +36,7 @@ import './models/ticketera/precio.model.js';
 import './models/ticketera/tipo_precio.model.js';
 import './models/ticketera/paypal.model.js';
 import './models/ticketera/codigos_descuento.model.js';
+
 
 const main=async ()=>{
     try {

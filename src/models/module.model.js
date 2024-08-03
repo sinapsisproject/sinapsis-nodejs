@@ -7,6 +7,7 @@ import { text } from './text.model.js';
 import { questionary } from './questionary.model.js';
 import { foro } from './foro.model.js';
 import { objective } from './objectives.model.js';
+import { formulario } from './formulario.model.js';
 
 export const module = sequelize.define('modulo', {
     id: {
@@ -35,7 +36,6 @@ video.belongsTo(module , {
     targetId: 'id'
 });
 
-
 module.hasMany(note, {
     foreignKey: 'id_modulo',
     sourceKey: 'id'
@@ -46,7 +46,6 @@ note.belongsTo(module , {
     targetId: 'id'
 });
 
-
 module.hasMany(text, {
     foreignKey: 'id_modulo',
     sourceKey: 'id'
@@ -56,7 +55,6 @@ text.belongsTo(module , {
     foreignKey: 'id_modulo',
     targetId: 'id'
 });
-
 
 module.hasMany(questionary, {
     foreignKey: 'id_modulo',
@@ -78,13 +76,22 @@ foro.belongsTo(module , {
     targetId: 'id'
 });
 
-
 module.hasMany(objective, {
     foreignKey: 'id_modulo',
     sourceKey: 'id'
 });
 
 objective.belongsTo(module , {
+    foreignKey: 'id_modulo',
+    targetId: 'id'
+});
+
+module.hasMany(formulario, {
+    foreignKey: 'id_modulo',
+    sourceKey: 'id'
+});
+
+formulario.belongsTo(module , {
     foreignKey: 'id_modulo',
     targetId: 'id'
 });

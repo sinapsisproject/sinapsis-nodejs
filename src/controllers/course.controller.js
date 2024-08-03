@@ -18,7 +18,9 @@ import { progress } from "../models/progress.model.js";
 import { user } from "../models/user.model.js"
 import { response_questionary } from "../models/response_questionary.model.js";
 import { objective } from "../models/objectives.model.js";
-
+import { formulario } from "../models/formulario.model.js";
+import { pregunta_formulario } from "../models/pregunta_formulario.model.js";
+import { respuesta_formulario } from "../models/respuesta_formulario.model.js";
 
 
 const createCourse = async(req , res) => {
@@ -281,12 +283,21 @@ const getSidebarByIdCourse = async(req , res) => {
                             ]
                         }
                     ]
+                },
+                {
+                    model: formulario,
+                    include : [
+                        {
+                            model: pregunta_formulario
+                        }
+                    ]
                 }
             ],
             order : [
                 ['ubicacion' , 'ASC'],
                 [foro, questions_foro, 'createdAt', 'DESC'],
-                [foro, questions_foro, response_foro, 'createdAt', 'ASC'] 
+                [foro, questions_foro, response_foro, 'createdAt', 'ASC'],
+                [formulario, pregunta_formulario, 'id', 'ASC']
             ]          
         });
 
@@ -342,6 +353,13 @@ const getSidebarByIdCourse = async(req , res) => {
                     existe = progress_user.some(datos => datos.nombre_item == foro.tipo && datos.id_item == foro.id);
                     foro.done = existe ? true : false;
                     tem.push(foro);
+                })
+
+                dato.dataValues.formularios.map(formulario => formulario.dataValues).map( (formulario) =>{
+                    formulario.tipo = 'formulario';
+                    existe = progress_user.some(datos => datos.nombre_item == formulario.tipo && datos.id_item == formulario.id);
+                    formulario.done = existe ? true : false;
+                    tem.push(formulario);
                 })
 
 
@@ -462,7 +480,7 @@ const getContentCourse= async(req , res) => {
             id_curso : id
         },
         order : [['ubicacion' , 'ASC']],
-        include: [video, note, text, questionary, foro]           
+        include: [video, note, text, questionary, foro, formulario]           
     });
 
 
@@ -501,6 +519,11 @@ const getContentCourse= async(req , res) => {
             dato.dataValues.foros.map(foro => foro.dataValues).map( (foro) =>{
                 foro.tipo = 'foro';
                 tem.push(foro);
+            })
+
+            dato.dataValues.formularios.map(formulario => formulario.dataValues).map( (formulario) =>{
+                formulario.tipo = 'formulario';
+                tem.push(formulario);
             })
 
 

@@ -22,6 +22,7 @@ import progressRoutes from "./routes/progress.routes.js";
 import payRoutes from "./routes/pay.routes.js";
 import activecampaign from "./routes/activecampaign.routes.js";
 import objectiveRoutes from "./routes/objective.routes.js";
+import formularioRoutes from "./routes/formulario.routes.js"; 
 
 import ticketRoutes from "./routes/ticketera/productos_ticket.routes.js";
 import paypalRoutes from "./routes/paypal.routes.js";
@@ -56,6 +57,7 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/pay' , payRoutes);
 app.use('/api/activecampaign' , activecampaign);
 app.use('/api/objective' , objectiveRoutes);
+app.use('/api/formulario' , formularioRoutes);
 
 app.use('/api/ticket' , ticketRoutes);
 app.use('/api/paypal' , paypalRoutes);

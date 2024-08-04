@@ -21,6 +21,9 @@ import { objective } from "../models/objectives.model.js";
 import { formulario } from "../models/formulario.model.js";
 import { pregunta_formulario } from "../models/pregunta_formulario.model.js";
 import { respuesta_formulario } from "../models/respuesta_formulario.model.js";
+import { encuesta } from "../models/encuesta.model.js";
+import { encuesta_pregunta } from "../models/encuesta_pregunta.model.js";
+import { encuesta_alternativa } from "../models/encuesta_alternativa.model.js";
 
 
 const createCourse = async(req , res) => {
@@ -291,13 +294,29 @@ const getSidebarByIdCourse = async(req , res) => {
                             model: pregunta_formulario
                         }
                     ]
+                },
+                {
+                    model: encuesta,
+                    include: [
+                        {
+                            model: encuesta_pregunta,
+                            include : [
+                                {
+                                    model: encuesta_alternativa
+                                }
+                            ]
+                        }
+                    ]
                 }
+
             ],
             order : [
                 ['ubicacion' , 'ASC'],
+                [questionary , question, alternative , 'id' , 'ASC'],
                 [foro, questions_foro, 'createdAt', 'DESC'],
                 [foro, questions_foro, response_foro, 'createdAt', 'ASC'],
-                [formulario, pregunta_formulario, 'id', 'ASC']
+                [formulario, pregunta_formulario, 'id', 'ASC'],
+                [encuesta, encuesta_pregunta, encuesta_alternativa , 'id' , 'ASC']
             ]          
         });
 
@@ -362,6 +381,12 @@ const getSidebarByIdCourse = async(req , res) => {
                     tem.push(formulario);
                 })
 
+                dato.dataValues.encuesta.map(encuesta => encuesta.dataValues).map( (encuesta) =>{
+                    encuesta.tipo = 'encuesta';
+                    existe = progress_user.some(datos => datos.nombre_item == encuesta.tipo && datos.id_item == encuesta.id);
+                    encuesta.done = existe ? true : false;
+                    tem.push(encuesta);
+                })
 
 
                 tem.sort(compararPorUbicacion)

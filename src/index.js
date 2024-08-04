@@ -23,6 +23,11 @@ import './models/formulario.model.js';
 import './models/pregunta_formulario.model.js';
 import './models/respuesta_formulario.model.js';
 
+import './models/encuesta.model.js';
+import './models/encuesta_pregunta.model.js';
+import './models/encuesta_alternativa.model.js';
+import './models/encuesta_respuesta.model.js';
+
 import './models/ticketera/tipo_usuario.model.js';
 import './models/ticketera/caracteristica.model.js';
 import './models/ticketera/tipo_producto.model.js';

@@ -78,7 +78,7 @@ const assessmentTestByUser = async(req, res) => {
             where: {
                 id : id_questionary
             },
-            attributes : ['id' , 'nombre', 'aprobacion'],
+            attributes : ['id' , 'nombre', 'aprobacion', 'clase'],
             include: [
                 {
                     model: question,

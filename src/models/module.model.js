@@ -8,6 +8,7 @@ import { questionary } from './questionary.model.js';
 import { foro } from './foro.model.js';
 import { objective } from './objectives.model.js';
 import { formulario } from './formulario.model.js';
+import { encuesta } from './encuesta.model.js';
 
 export const module = sequelize.define('modulo', {
     id: {
@@ -92,6 +93,16 @@ module.hasMany(formulario, {
 });
 
 formulario.belongsTo(module , {
+    foreignKey: 'id_modulo',
+    targetId: 'id'
+});
+
+module.hasMany(encuesta, {
+    foreignKey: 'id_modulo',
+    sourceKey: 'id'
+});
+
+encuesta.belongsTo(module , {
     foreignKey: 'id_modulo',
     targetId: 'id'
 });

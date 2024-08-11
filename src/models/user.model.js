@@ -35,6 +35,9 @@ export const user = sequelize.define('usuario', {
     },
     estado: {
         type: DataTypes.STRING
+    },
+    code_recovery: {
+        type: DataTypes.STRING
     }
 });
 

@@ -12,7 +12,8 @@ router.use(function (req, res, next) {
 
 
 router.get("/contact"  , activecampaign.getContact);
+router.get("/list_fields"  , activecampaign.listFields);
 router.post("/contact"  , activecampaign.createContact);
-router.get("/send_mail_template" , activecampaign.sendMailTemplate);
+router.post("/send_mail_template" , activecampaign.sendMailTemplate);
 
 export default router;

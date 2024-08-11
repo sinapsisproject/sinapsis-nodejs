@@ -45,7 +45,7 @@ import './models/ticketera/codigos_descuento.model.js';
 
 const main=async ()=>{
     try {
-        //await sequelize.sync({alter: true});
+        await sequelize.sync({alter: true});
         await sequelize.authenticate();
         console.log("Connection has been established successfully.");
         app.listen(app.get("port"));

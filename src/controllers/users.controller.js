@@ -117,9 +117,117 @@ const validateUserCourse = async(req , res) => {
 
 }
 
+const createCodeRecoveryPass = async(req , res) => {
+
+    const {email} = req.body;
+
+    const randomNumber = Math.floor(1000 + Math.random() * 9000);
+
+    const datos = await user.update(
+        { 
+            code_recovery : randomNumber 
+        },
+        {
+          where: { email: email } 
+        }
+    );
+
+
+    if(datos[0] == 1){    
+        res.json({
+            "status"    : true,
+            "code"      : randomNumber
+        });
+    }else{
+        res.json({
+            "status"    : false,
+            "error"     : "Error al guardar el código"
+        });
+    }
+}
+
+
+const validateCodeRecoveryPass = async(req , res) => {
+
+    const {email , code} = req.body;
+
+    const data = await user.findAll({
+        where: {
+            code_recovery   : code.toString(),
+            email           : email
+        }
+    });
+
+    const user_data = data.map(res => res.get({plain: true}));
+
+    if(user_data.length == 1){
+        res.json({
+            "status"    : true,
+            "mensaje"   : "Código valido"
+        });
+    }else{
+        res.json({
+            "status"    : false,
+            "mensaje"   : "Código incorrecto"
+        });
+    }
+
+}
+
+
+const updatePasswordByCode = async(req , res) => {
+
+    const {email , code , password} = req.body;
+
+    const salt = bcryptjs.genSaltSync();
+    const password_encrypt = bcryptjs.hashSync(password, salt);
+
+    user.update(
+        { password: password_encrypt },
+        {
+          where: {
+            code_recovery: code,
+            email : email
+          }
+        }
+      ).then(result => {
+
+        console.log(result);
+
+        if(result[0] == 1){
+
+            user.update(
+                { code_recovery: null },
+                {
+                  where: {
+                    email : email
+                  }
+                }
+            ).then(result => {
+
+                res.json({
+                    "status"    : true,
+                    "response"  : result
+                });
+
+            }).catch(error => {
+                console.error('Error al actualizar los registros:', error);
+            });
+
+        }
+
+      }).catch(error => {
+        console.error('Error al actualizar los registros:', error);
+      });
+
+}
+
 
 
 export const methods = {
     registerUser,
-    validateUserCourse
+    validateUserCourse,
+    createCodeRecoveryPass,
+    validateCodeRecoveryPass,
+    updatePasswordByCode
 }

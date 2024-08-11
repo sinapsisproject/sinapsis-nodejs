@@ -164,7 +164,7 @@ const validateTransactionTicket = async(req , res)=>{
                                 service: 'gmail', // Puedes usar otros servicios como Yahoo, Outlook, etc.
                                 auth: {
                                     user: 'contacto@sinapsisclinica.com', // Tu correo electrónico
-                                    pass: 'bevc zfqq hhly xtkh' // Tu contraseña
+                                    pass: process.env.CLAVE_APP_GMAIL // Tu contraseña
                                 }
                             });
 

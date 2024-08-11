@@ -62,7 +62,7 @@ const getContact = async(req , res) => {
 
 const sendMailTemplate = async(req, res) => {
 
-    const {mail} =  req.body;
+    const {id_automatizacion , email , code} =  req.body;
 
     request(
         {
@@ -71,7 +71,7 @@ const sendMailTemplate = async(req, res) => {
             headers: req.headers, 
             body : {
                 contact: {
-                    email: mail
+                    email: email
                 }
             },
             json: true
@@ -79,19 +79,19 @@ const sendMailTemplate = async(req, res) => {
         {
             if (error) throw new Error(error);
       
-
             let contactID = body.contact.id;
 
 
             request(
                 {
                     method: 'POST',
-                    url: req.url_base+'campaignEmails/send',
+                    url: req.url_base+'fieldValues',
                     headers: req.headers,
                     body : {
-                        email: {
-                            campaign: 20,
-                            contact: contactID
+                        fieldValue: {
+                            contact: contactID,
+                            field: 2, //id del campo code_recovery_pass
+                            value: code
                         }
                     },
                     json: true
@@ -99,22 +99,63 @@ const sendMailTemplate = async(req, res) => {
                 {
                     if (error) throw new Error(error);
               
-                    res.json({
-                        "status" : true,
-                        "response" : body
-                    })
-            
-              });
 
-    
+                    if(body.fieldValue.value == code){
+
+                        request(
+                        {
+                            method: 'POST',
+                            url: req.url_base+'contactAutomations',
+                            headers: req.headers,
+                            body : {
+                                contactAutomation: {
+                                    automation: id_automatizacion,
+                                    contact: contactID
+                                }
+                            },
+                            json: true
+                        },function (error, response, body) 
+                        {
+                            if (error) throw new Error(error);
+                            
+                            console.log(body);
+
+
+                            res.json({
+                                "status" : true,
+                                "response" : body
+                            })
+                    
+                        });
+
+                    }
+
+                    
+            
+                });
+
         });
 
 
 }
 
 
+const listFields = async(req, res) => {
+
+    request({method: 'GET' , url: req.url_base+'fields' , headers: req.headers}, function (error, response, body) {
+        if (error) throw new Error(error);
+      
+        res.json({
+            "status" : true,
+            "response" : JSON.parse(body)
+        })
+      });
+
+}
+
 export const methods = {
     getContact,
     createContact,
-    sendMailTemplate
+    sendMailTemplate,
+    listFields
 }

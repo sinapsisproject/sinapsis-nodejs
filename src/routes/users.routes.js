@@ -6,5 +6,8 @@ const router = Router();
 
 router.post("/register" , usersController.registerUser);
 router.get("/validate_course_user/:id" , validarToken , usersController.validateUserCourse);
+router.post("/code_recovery_pass/" , usersController.createCodeRecoveryPass);
+router.post("/validate_code_recovery_pass" , usersController.validateCodeRecoveryPass);
+router.post("/update_password_recovery" , usersController.updatePasswordByCode);
 
 export default router;

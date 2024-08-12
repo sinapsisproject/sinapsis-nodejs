@@ -3,6 +3,8 @@ import bcryptjs from 'bcryptjs';
 
 import { user } from "../models/user.model.js";
 
+import Ope from 'sequelize';
+const {Op} = Ope;
 
 
 const authLogin = async(req , res)=>{
@@ -10,9 +12,17 @@ const authLogin = async(req , res)=>{
     try {
         
         const {usuario , password} = req.body;
+        // const response_user = await user.findAll({
+        //     where: {
+        //         username: usuario
+        //     }
+        // });
+
         const response_user = await user.findAll({
             where: {
-                username: usuario
+                username: {
+                    [Op.iLike]: usuario
+                }
             }
         });
 

@@ -3,7 +3,8 @@ import bcryptjs from 'bcryptjs';
 import { user } from '../models/user.model.js';
 import { user_course } from '../models/user_course.model.js';
 
-
+import Ope from 'sequelize';
+const {Op} = Ope;
 
 const registerUser = async(req , res) => {
 
@@ -128,10 +129,14 @@ const createCodeRecoveryPass = async(req , res) => {
             code_recovery : randomNumber 
         },
         {
-          where: { email: email } 
+          where: 
+            { 
+                email: {
+                    [Op.iLike]: email
+                } 
+            } 
         }
     );
-
 
     if(datos[0] == 1){    
         res.json({
@@ -154,7 +159,9 @@ const validateCodeRecoveryPass = async(req , res) => {
     const data = await user.findAll({
         where: {
             code_recovery   : code.toString(),
-            email           : email
+            email           : {
+                [Op.iLike]: email
+            }
         }
     });
 
@@ -187,12 +194,12 @@ const updatePasswordByCode = async(req , res) => {
         {
           where: {
             code_recovery: code,
-            email : email
+            email : {
+                [Op.iLike]: email
+            }
           }
         }
       ).then(result => {
-
-        console.log(result);
 
         if(result[0] == 1){
 
@@ -200,7 +207,9 @@ const updatePasswordByCode = async(req , res) => {
                 { code_recovery: null },
                 {
                   where: {
-                    email : email
+                    email : {
+                        [Op.iLike]: email
+                    }
                   }
                 }
             ).then(result => {

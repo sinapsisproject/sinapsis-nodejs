@@ -25,7 +25,7 @@ const getPreguntasByIdEncuesta = async(req , res) => {
                 }
             ],
             order : [
-                [encuesta_pregunta, encuesta_alternativa ,'id' , 'ASC']
+                [encuesta_pregunta, encuesta_alternativa ,'id' , 'DESC']
             ]
 
         })

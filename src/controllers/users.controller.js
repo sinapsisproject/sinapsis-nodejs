@@ -28,7 +28,9 @@ const registerUser = async(req , res) => {
 
             const response_user = await user.findAll({
                 where: {
-                    email: email
+                    email: {
+                        [Op.iLike]: email
+                    }
                 }
             });
 
@@ -231,6 +233,60 @@ const updatePasswordByCode = async(req , res) => {
 
 }
 
+const registerUserMasive = async(req , res) => {
+
+    const {primer_nombre, apellido , username, email ,password } = req.body;
+
+    try {
+        
+        const response_user = await user.findAll({
+            where: {
+                email: {
+                    [Op.iLike]: email
+                }
+            }
+        });
+        
+        if(response_user.length > 0){
+    
+            res.json({
+                "status" : false,
+                "msg"    : 'El usuario ya existe'
+            });
+    
+        }else{
+            
+            const salt = bcryptjs.genSaltSync();
+            const password_encrypt = bcryptjs.hashSync(password, salt);
+
+
+            const newUser = await user.create({
+                nombre: primer_nombre+" "+apellido, 
+                username, 
+                email,
+                password : password_encrypt, 
+                estado : 'activo',
+                id_tipo_usuario : 1
+            });
+    
+            res.json({'status' : true , 'data' : newUser});
+    
+        }
+
+    } catch (error) {
+        res.json({
+            "status" : false,
+            "msg"    : 'Error al insertar nuevo usuario',
+            "error"  : error
+        })
+    }
+
+
+    
+
+
+}
+
 
 
 export const methods = {
@@ -238,5 +294,6 @@ export const methods = {
     validateUserCourse,
     createCodeRecoveryPass,
     validateCodeRecoveryPass,
-    updatePasswordByCode
+    updatePasswordByCode,
+    registerUserMasive
 }

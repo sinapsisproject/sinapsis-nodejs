@@ -235,7 +235,7 @@ const updatePasswordByCode = async(req , res) => {
 
 const registerUserMasive = async(req , res) => {
 
-    const {primer_nombre, apellido , username, email ,password } = req.body;
+    const {primer_nombre, apellido , username, email ,password , id_curso } = req.body;
 
     try {
         
@@ -259,7 +259,6 @@ const registerUserMasive = async(req , res) => {
             const salt = bcryptjs.genSaltSync();
             const password_encrypt = bcryptjs.hashSync(password, salt);
 
-
             const newUser = await user.create({
                 nombre: primer_nombre+" "+apellido, 
                 username, 
@@ -269,6 +268,13 @@ const registerUserMasive = async(req , res) => {
                 id_tipo_usuario : 1
             });
     
+            
+            const course_user = await user_course.create({
+                id_usuario : newUser.id, 
+                id_curso : id_curso, 
+                estado : "activo"
+            });
+
             res.json({'status' : true , 'data' : newUser});
     
         }

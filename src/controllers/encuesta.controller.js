@@ -1,6 +1,7 @@
 import { encuesta } from './../models/encuesta.model.js';
 import { encuesta_pregunta } from '../models/encuesta_pregunta.model.js';
 import { encuesta_alternativa } from '../models/encuesta_alternativa.model.js';
+import { encuesta_respuesta } from '../models/encuesta_respuesta.model.js';
 
 
 const getPreguntasByIdEncuesta = async(req , res) => {
@@ -45,6 +46,40 @@ const getPreguntasByIdEncuesta = async(req , res) => {
      
 }
 
+
+const insertResponseFormularios = async(req , res) => {
+
+    const {respuestas} = req.body;
+    const id_usuario = req.usuario.uid;
+
+    if(respuestas.length > 0){
+        await Promise.all(
+            respuestas.map(async (id_respuesta) => {
+
+                const response_enc = await encuesta_respuesta.create({
+                    id_encuesta_alternativa : id_respuesta,
+                    id_usuario
+                })
+
+            }
+        ))
+
+        res.json({
+            "status" : true,
+            "response" : "Datos ingresados"
+        })
+
+    }else{
+        res.json({
+            "status" : false,
+            "response" : "No hay respuestas"
+        })
+    }
+
+}
+
+
 export const methods = {
-    getPreguntasByIdEncuesta
+    getPreguntasByIdEncuesta,
+    insertResponseFormularios
 }

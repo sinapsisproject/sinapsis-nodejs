@@ -3,6 +3,7 @@ import { sequelize } from '../database/database.js';
 
 import { encuesta_respuesta } from './encuesta_respuesta.model.js';
 
+
 export const encuesta_alternativa = sequelize.define('encuesta_alternativa', {
     id: {
         type: DataTypes.INTEGER,
@@ -12,7 +13,11 @@ export const encuesta_alternativa = sequelize.define('encuesta_alternativa', {
     alternativa: {
         type: DataTypes.TEXT
     }
+}, {
+    timestamps: false // Desactiva createdAt y updatedAt
 });
+
+
 
 
 encuesta_alternativa.hasMany(encuesta_respuesta, {

@@ -141,7 +141,10 @@ const getCoursesByIdUser = async(req , res) => {
                         }
                     ]
                 }
-            ]
+            ],
+            order: [
+                [user_course, course, module, 'id', 'ASC']
+            ]  
         });
 
 

@@ -287,9 +287,51 @@ const registerUserMasive = async(req , res) => {
         })
     }
 
+}
 
-    
+const asociarUsuarioCurso = async(req , res) => {
 
+    const {email, id_curso } = req.body;
+
+    try {
+        
+        const response_user = await user.findAll({
+            where: {
+                email: {
+                    [Op.iLike]: email
+                }
+            }
+        });
+
+        if(response_user.length > 0){
+
+            const newUser = await user_course.create({
+                estado : "activo",
+                id_usuario : response_user[0].id,
+                id_curso
+            });
+
+            res.json({
+                "status" : true,
+                "response"  : newUser
+            });
+
+        }else{
+            res.json({
+                "status" : false,
+                "usuario"  : email,
+                "msg" : "NO AGREGADO"  
+            });
+        } 
+        
+
+    } catch (error) {
+        res.json({
+            "status" : false,
+            "msg"    : 'Error al insertar nuevo usuario',
+            "error"  : error
+        })
+    }
 
 }
 
@@ -301,5 +343,6 @@ export const methods = {
     createCodeRecoveryPass,
     validateCodeRecoveryPass,
     updatePasswordByCode,
-    registerUserMasive
+    registerUserMasive,
+    asociarUsuarioCurso
 }

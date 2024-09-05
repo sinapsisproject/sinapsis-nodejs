@@ -10,5 +10,6 @@ router.post("/code_recovery_pass/" , usersController.createCodeRecoveryPass);
 router.post("/validate_code_recovery_pass" , usersController.validateCodeRecoveryPass);
 router.post("/update_password_recovery" , usersController.updatePasswordByCode);
 router.post("/register_user_masive" , usersController.registerUserMasive);
+router.post("/asociar_usuario_curso" , usersController.asociarUsuarioCurso);
 
 export default router;

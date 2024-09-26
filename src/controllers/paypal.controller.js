@@ -1,5 +1,5 @@
 import { paypalTransactionLog } from './../models/ticketera/paypal.model.js';
-import { orden_ticket } from './../models/ticketera/orden_ticket.model.js';
+import { orden } from './../models/orders.model.js';
 import { usuarios_ticket } from './../models/ticketera/usuarios_ticket.model.js';
 import paypal from 'paypal-rest-sdk';
 import { config } from 'dotenv';
@@ -25,27 +25,11 @@ const createOrder = async(req , res) => {
         })
     }
 
-    const dataOrden = await orden_ticket.findAll({
+    const dataOrden = await orden.findAll({
       where: {
           id : id_orden
       }
     });
-
-    if(dataOrden[0]?.total_dolares){
-
-      if(dataOrden[0]?.descuento != 0){
-        let total_descuento = (dataOrden[0]?.total_dolares * dataOrden[0]?.descuento) / 100;
-        monto = dataOrden[0]?.total_dolares - total_descuento;
-      }else{
-        monto = dataOrden[0]?.total_dolares;
-      }
-
-    }else{
-      return res.json({
-        "status" : false,
-        "msg"    : 'No se encontró el precio para la orden'
-      })
-    }
 
     paypal.configure({
       'mode': process.env.ENTORNO_PAYPAL, // Cambia a 'live' para producción

@@ -1,10 +1,13 @@
 import pkg from 'transbank-sdk';
 const {WebpayPlus} = pkg;
+import paypal from 'paypal-rest-sdk';
+
 
 import { order } from '../models/orders.model.js';
 import { course } from '../models/course.model.js';
 import { user_course } from '../models/user_course.model.js';
 import { user } from '../models/user.model.js';
+
 
 const createTransaction = async(req , res)=>{
 
@@ -212,5 +215,8 @@ const getDataPagoOkByOrder = async(req , res)=>{
   export const methods = {
     createTransaction,
     validateTransaction,
-    getDataPagoOkByOrder
+    getDataPagoOkByOrder,
+    createOrder,
+    successPay,
+    cancelPay
 }

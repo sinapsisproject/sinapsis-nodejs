@@ -160,9 +160,9 @@ const successPay = async(req , res) => {
                 {
                     model : item_ticket,
                     as : "it",
-                    where : {
+                    /*where : {
                         id_producto : 1 //IDENTIFICADOR DE PRODUCTO CURSO ENDOCRINO
-                    }
+                    }*/
                 }
             ]
         })
@@ -183,7 +183,7 @@ const successPay = async(req , res) => {
               let dataUserCourse = {
                   "estado" : "activo",
                   "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                  "id_curso" : 13 //CAMBIAR13
+                  "id_curso" : item.id_producto // asumiendo que el id_producto es equivalente al id_curso
               }
               const userCourse = user_course.create(dataUserCourse);
             }

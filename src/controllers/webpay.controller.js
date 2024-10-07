@@ -122,7 +122,7 @@ const validateTransactionTicket = async(req , res)=>{
                         let dataUserCourse = {
                             "estado" : "activo",
                             "id_usuario" :jsonDataOrder.id_usuario_sinapsis,
-                            "id_curso" : 13 //CURSO ENDROCRINOLOGIA13
+                            "id_curso" : 8 //CURSO ENDROCRINOLOGIA13
                         }
                         let userCourse = user_course.create(dataUserCourse);
                     }
@@ -171,7 +171,7 @@ const validateTransactionTicket = async(req , res)=>{
                             const mailOptions = {
                                 from: 'contacto@sinapsisclinica.com', // Dirección del remitente
                                 to: dataUser.correo_electronico, // Dirección del destinatario
-                                subject: '¡Felicitaciones! Ya estás inscrito en el curso de Endocrinología y Diabetología Hospitalaria', // Asunto del correo
+                                subject: '¡Felicitaciones! Ya estás inscrito en el curso de  Electrocardiografía básica e intermedia a través de casos clínicos', // Asunto del correo
                                 //text: 'Contenido del correo en texto plano', // Cuerpo del correo en texto plano
                                 html: html 
                             };

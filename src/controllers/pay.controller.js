@@ -216,7 +216,5 @@ const getDataPagoOkByOrder = async(req , res)=>{
     createTransaction,
     validateTransaction,
     getDataPagoOkByOrder,
-    createOrder,
-    successPay,
-    cancelPay
+
 }

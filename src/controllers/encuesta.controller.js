@@ -49,36 +49,11 @@ const getPreguntasByIdEncuesta = async(req , res) => {
 
 const insertResponseFormularios = async(req , res) => {
 
-    const {respuestas,id_encuesta} = req.body;
+    const {respuestas} = req.body;
     const id_usuario = req.usuario.uid;
     
-    // Verificar si el usuario ya ha respondido a la encuesta
-    const existingRespuestas = await encuesta_respuesta.findAll({
-        where: {
-            id_usuario: id_usuario
-        },
-        include: [
-            {
-                model: encuesta_alternativa,
-                include: [
-                    {
-                        model: encuesta_pregunta,
-                        where: {
-                            id_encuesta: id_encuesta // Filtrar por encuesta
-                        }
-                    }
-                ]
-            }
-        ]
-    });
-    
-    // Si ya hay respuestas del usuario para esa encuesta, no permitir más respuestas
-    if (existingRespuestas.length > 0) {
-        return res.json({
-            "status": false,
-            "response": "Ya has completado esta encuesta, no puedes responderla nuevamente."
-        });
-    }
+
+
 
     if(respuestas.length > 0){
         await Promise.all(
@@ -91,7 +66,7 @@ const insertResponseFormularios = async(req , res) => {
                         id_usuario: id_usuario
                     }
                 });
-                
+
                  // Si no existe, guardamos la nueva respuesta
                 if(!existingResponse){
                     const response_enc = await encuesta_respuesta.create({

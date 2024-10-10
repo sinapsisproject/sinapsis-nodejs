@@ -51,6 +51,33 @@ const insertResponseFormularios = async(req , res) => {
 
     const {respuestas} = req.body;
     const id_usuario = req.usuario.uid;
+    
+    const existingRespuestas = await encuesta_respuesta.findAll({
+        where: {
+            id_usuario: id_usuario
+        },
+        include: [
+            {
+                model: encuesta_alternativa,
+                include: [
+                    {
+                        model: encuesta_pregunta,
+                        where: {
+                            id_encuesta: id_encuesta // Filtrar por encuesta
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+    
+    if (existingRespuestas.length > 0) {
+        return res.json({
+            "status": false,
+            "response": "Ya has completado esta encuesta, no puedes responderla nuevamente."
+        });
+    }
+    
 
     if(respuestas.length > 0){
         await Promise.all(

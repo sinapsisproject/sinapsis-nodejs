@@ -56,13 +56,28 @@ const insertResponseFormularios = async(req , res) => {
         await Promise.all(
             respuestas.map(async (id_respuesta) => {
 
-                const response_enc = await encuesta_respuesta.create({
-                    id_encuesta_alternativa : id_respuesta,
-                    id_usuario
-                })
 
-            }
-        ))
+                const existingResponse = await encuesta_respuesta.findOne({
+                    where: {
+                        id_encuesta_alternativa: id_respuesta,
+                        id_usuario: id_usuario
+                    }
+                });
+
+                if(!existingResponse){
+                    const response_enc = await encuesta_respuesta.create({
+                        id_encuesta_alternativa : id_respuesta,
+                        id_usuario
+                    });
+                }
+                else{
+                    console.log('la respuesta ya fue registrada para la alternativa ${id_respuesta} del usuario ${id_usuario}');
+                }
+
+                
+
+            })
+    );
 
         res.json({
             "status" : true,

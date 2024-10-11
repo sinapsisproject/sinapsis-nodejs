@@ -51,6 +51,33 @@ const insertResponseFormularios = async(req , res) => {
 
     const {respuestas} = req.body;
     const id_usuario = req.usuario.uid;
+
+        // Verificar si ya existe al menos una respuesta para este usuario en la encuesta
+        const existingRespuestas = await encuesta_respuesta.findAll({
+            where: {
+                id_usuario: id_usuario
+            },
+            include: [
+                {
+                    model: encuesta_alternativa,
+                    include: [
+                        {
+                            model: encuesta_pregunta,
+                            where: {
+                                id_encuesta: req.body.id_encuesta // Filtrar por encuesta
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    
+        // Si ya existe alguna respuesta para este usuario en esta encuesta, no hacer nada
+        if (existingRespuestas.length > 0) {
+            // Si no quieres devolver ningún mensaje, simplemente retorna y no hagas nada.
+            return;
+        }
+    
     
 
 

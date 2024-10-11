@@ -7,12 +7,16 @@ const insertResponseFormulario = async(req , res) => {
 
     try {
 
-        let count_respuestas = respuestas.length;
+         // Filtrar respuestas válidas, es decir, aquellas que no están en blanco o nulas
+         const respuestasValidas = respuestas.filter(res => res.respuesta !== null && res.respuesta !== '');
+
+        let count_respuestas = respuestasValidas.length;
         
         let c = 0;
 
+        // Procesar solo las respuestas válidas
         await Promise.all(
-            respuestas.map(async (res) => {
+            respuestasValidas.map(async (res) => {
 
                 const response = await respuesta_formulario.create({
                     respuesta : res.respuesta, 
@@ -24,23 +28,14 @@ const insertResponseFormulario = async(req , res) => {
                     c = c + 1;
                 }
             })
-        )
+        );
+          // Responder sin generar errores en caso de respuestas vacías
+          res.json({
+            "status": true,
+            "registros": c
+        });
 
-        if(c == count_respuestas){
-
-            res.json({
-                "status" : true,
-                "registros" : c 
-            })
-
-        }else{
-            
-            res.json({
-                "status" : false,
-                "error"  : "Error al insertar los datos"  
-            })
-
-        }
+   
 
     } catch (error) {
         res.json({

@@ -55,4 +55,4 @@ const insertResponseFormulario = async(req , res) => {
 
 export const methods = {
     insertResponseFormulario
-}
+} 

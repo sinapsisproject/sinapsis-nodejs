@@ -414,7 +414,7 @@ const sendMailUserTicket = async(req , res) => {
             const mailOptions = {
                 from: 'contacto@sinapsisclinica.com', // Dirección del remitente
                 to: mail, // Dirección del destinatario
-                subject: '¡Felicitaciones! Ya estás inscrito en el curso de Endocrinología y Diabetología Hospitalaria', // Asunto del correo
+                subject: '¡Felicitaciones! Ya estás inscrito en el curso de  Electrocardiografía básica e intermedia a través de casos clínicos', // Asunto del correo
                 //text: 'Contenido del correo en texto plano', // Cuerpo del correo en texto plano
                 html: html 
             };

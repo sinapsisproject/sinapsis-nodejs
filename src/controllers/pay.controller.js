@@ -511,10 +511,6 @@ const createOrder = async(req , res)=>{
 }
 
 
-
-
-
-
   export const methods = {
     createTransaction,
     validateTransaction,

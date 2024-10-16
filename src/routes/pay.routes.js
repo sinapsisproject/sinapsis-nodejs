@@ -19,4 +19,11 @@ router.post("/create" , validarToken , payController.createTransaction);
 router.get("/validate" , payController.validateTransaction);
 router.get("/data_order/:id" , payController.getDataPagoOkByOrder);
 
+
+router.post("/create_paypal" , validarToken, payController.createTransactionPaypal);
+router.get("/success_paypal"  , payController.successPaypal);
+router.get("/cancel_paypal"  , payController.cancelPaypal);
+
+router.post("/create_order" , validarToken, payController.createOrder);
+
 export default router;

@@ -17,6 +17,9 @@ export const order = sequelize.define('ordenes', {
     estado: {
         type: DataTypes.STRING
     },
+    moneda: {
+        type: DataTypes.STRING
+    },
     total: {
         type: DataTypes.FLOAT
     },

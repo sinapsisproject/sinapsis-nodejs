@@ -227,7 +227,7 @@ const successPay = async(req , res) => {
               const mailOptions = {
                   from: 'contacto@sinapsisclinica.com', // Dirección del remitente
                   to: dataUser.correo_electronico, // Dirección del destinatario
-                  subject: '¡Felicitaciones! Ya estás inscrito en el curso de Endocrinología y Diabetología Hospitalaria', // Asunto del correo
+                  subject: '¡Felicitaciones! Ya estás inscrito en el curso "Congreso Medicina Interna en 5 Minutos', // Asunto del correo endocrino
                   //text: 'Contenido del correo en texto plano', // Cuerpo del correo en texto plano
                   html: html 
               };

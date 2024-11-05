@@ -90,20 +90,20 @@ const send_mail_quiz_response = async (usuario) => {
     });
 };
 
-// Función de ejemplo para manejar la respuesta del cuestionario
+// Función para manejar la respuesta del cuestionario
 const handle_quiz_response = async (req, res) => {
-    const { id_cuestionario, nombre_usuario, email_usuario } = req.body;
+    const { id_cuestionario, usuario, email } = req.body;
 
     // Verificar si el cuestionario es el de id = 13
     if (id_cuestionario === 13) {
         // Datos del usuario
-        const usuario = {
-            nombre: nombre_usuario,
-            email: email_usuario
+        const usuarioData = {
+            nombre: usuario,
+            email: email
         };
 
         // Enviar correo a los administradores
-        await send_mail_quiz_response(usuario);
+        await send_mail_quiz_response(usuarioData);
     }
 
     res.json({

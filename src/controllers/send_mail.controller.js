@@ -4,7 +4,7 @@ import path from 'path';
 import fs  from 'fs';
 import ejs from 'ejs';
 import { fileURLToPath } from 'url';
-import { Usuario } from '../models/usuarios.model.js'; // Ajusta la ruta de tu modelo de usuarios
+import { Usuarios, Cuestionarios } from './models'; 
 
 
 const send_mail_recovery_pass = async(req , res) => {
@@ -53,7 +53,7 @@ const send_mail_recovery_pass = async(req , res) => {
 
 }
 
-// Función para enviar el correo al responder el cuestionario con id = 13
+// Nueva función para enviar el correo al responder el cuestionario con id = 13
 const send_mail_quiz_response = async (usuario) => {
     // Ruta del archivo de plantilla de correo
     const __filename = fileURLToPath(import.meta.url);
@@ -93,46 +93,43 @@ const send_mail_quiz_response = async (usuario) => {
 
 // Función para manejar la respuesta del cuestionario
 const handle_quiz_response = async (req, res) => {
-    const { id_cuestionario, id_usuario } = req.body; // Supongamos que se envía el id del usuario
+    const { id_cuestionario, usuarioId } = req.body; // Asegúrate de pasar `usuarioId` en el cuerpo de la solicitud
 
     // Verificar si el cuestionario es el de id = 13
     if (id_cuestionario === 13) {
         try {
-            // Buscar los datos del usuario en la base de datos
-            const usuario = await Usuario.findByPk(id_usuario); // Cambia 'Usuario' por el nombre correcto de tu modelo
+            // Obtener el usuario de la base de datos
+            const usuario = await Usuarios.findByPk(usuarioId, {
+                attributes: ['nombre', 'email'] // Solo necesitamos `nombre` y `email`
+            });
 
+            // Verificar si el usuario existe
             if (!usuario) {
                 return res.status(404).json({
-                    "status": false,
-                    "response": "Usuario no encontrado"
+                    status: false,
+                    response: "Usuario no encontrado"
                 });
             }
 
-            // Crear el objeto de datos del usuario
-            const usuarioData = {
-                nombre: usuario.nombre,
-                email: usuario.email
-            };
-
-            // Enviar correo a los administradores
-            await send_mail_quiz_response(usuarioData);
-
+            // Enviar correo a los administradores con los datos del usuario
+            await send_mail_quiz_response(usuario);
             res.json({
-                "status": true,
-                "response": "Respuesta del cuestionario procesada y correo enviado"
+                status: true,
+                response: "Respuesta del cuestionario procesada y correo enviado"
             });
 
         } catch (error) {
             console.error('Error al procesar la respuesta del cuestionario:', error);
             res.status(500).json({
-                "status": false,
-                "response": "Error al procesar la respuesta del cuestionario"
+                status: false,
+                response: "Error al procesar la respuesta del cuestionario"
             });
         }
     } else {
+        // Si no es el cuestionario con id = 13, solo responde sin enviar el correo
         res.json({
-            "status": false,
-            "response": "No se envió el correo porque el cuestionario no es el indicado"
+            status: true,
+            response: "Respuesta del cuestionario procesada"
         });
     }
 };

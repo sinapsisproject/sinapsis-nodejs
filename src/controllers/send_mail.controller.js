@@ -52,7 +52,7 @@ const send_mail_recovery_pass = async(req , res) => {
 
 }
 
-// Nueva función para enviar el correo al responder el cuestionario con id = 13
+// Función para enviar el correo al responder el cuestionario con id = 13
 const send_mail_quiz_response = async (usuario) => {
     // Ruta del archivo de plantilla de correo
     const __filename = fileURLToPath(import.meta.url);
@@ -92,24 +92,48 @@ const send_mail_quiz_response = async (usuario) => {
 
 // Función para manejar la respuesta del cuestionario
 const handle_quiz_response = async (req, res) => {
-    const { id_cuestionario, usuario, email } = req.body;
+    const { id_cuestionario, id_usuario } = req.body; // Supongamos que se envía el id del usuario
 
     // Verificar si el cuestionario es el de id = 13
     if (id_cuestionario === 13) {
-        // Datos del usuario
-        const usuarioData = {
-            nombre: usuario,
-            email: email
-        };
+        try {
+            // Buscar los datos del usuario en la base de datos
+            const usuario = await Usuario.findByPk(id_usuario); // Cambia 'Usuario' por el nombre correcto de tu modelo
 
-        // Enviar correo a los administradores
-        await send_mail_quiz_response(usuarioData);
+            if (!usuario) {
+                return res.status(404).json({
+                    "status": false,
+                    "response": "Usuario no encontrado"
+                });
+            }
+
+            // Crear el objeto de datos del usuario
+            const usuarioData = {
+                nombre: usuario.nombre,
+                email: usuario.email
+            };
+
+            // Enviar correo a los administradores
+            await send_mail_quiz_response(usuarioData);
+
+            res.json({
+                "status": true,
+                "response": "Respuesta del cuestionario procesada y correo enviado"
+            });
+
+        } catch (error) {
+            console.error('Error al procesar la respuesta del cuestionario:', error);
+            res.status(500).json({
+                "status": false,
+                "response": "Error al procesar la respuesta del cuestionario"
+            });
+        }
+    } else {
+        res.json({
+            "status": false,
+            "response": "No se envió el correo porque el cuestionario no es el indicado"
+        });
     }
-
-    res.json({
-        "status": true,
-        "response": "Respuesta del cuestionario procesada"
-    });
 };
 
 export const methods = {

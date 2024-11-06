@@ -4,7 +4,7 @@ import path from 'path';
 import fs  from 'fs';
 import ejs from 'ejs';
 import { fileURLToPath } from 'url';
-import { Usuarios, Cuestionarios } from './models'; 
+
 
 
 const send_mail_recovery_pass = async(req , res) => {

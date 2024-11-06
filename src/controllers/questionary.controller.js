@@ -10,7 +10,7 @@ import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import ejs from 'ejs';
-import { Usuarios, Cuestionarios } from './models';
+
 
 import Ope from 'sequelize';
 const {Op} = Ope;

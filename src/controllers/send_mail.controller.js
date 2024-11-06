@@ -4,6 +4,7 @@ import path from 'path';
 import fs  from 'fs';
 import ejs from 'ejs';
 import { fileURLToPath } from 'url';
+import { Usuario } from '../models/usuarios.model.js'; // Ajusta la ruta de tu modelo de usuarios
 
 
 const send_mail_recovery_pass = async(req , res) => {

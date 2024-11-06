@@ -53,89 +53,9 @@ const send_mail_recovery_pass = async(req , res) => {
 
 }
 
-// Nueva función para enviar el correo al responder el cuestionario con id = 13
-const send_mail_quiz_response = async (usuario) => {
-    // Ruta del archivo de plantilla de correo
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    const htmlPath = path.join(__dirname, 'ticketera', 'assets', 'templates', 'quiz_response.ejs');
-
-    // Renderizar la plantilla de correo con EJS
-    ejs.renderFile(htmlPath, { usuario }, (err, html) => {
-        if (err) {
-            console.error('Error al leer el archivo HTML');
-            return;
-        } else {
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'contacto@sinapsisclinica.com',
-                    pass: process.env.CLAVE_APP_GMAIL
-                }
-            });
-
-            const mailOptions = {
-                from: 'contacto@sinapsisclinica.com',
-                to: 'adagnino@sinapsisclinica.com, nicolasgomez7@live.cl', // Correo de los administradores
-                subject: `Respuesta al cuestionario por ${usuario.nombre}`,
-                html: html
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Correo enviado a administradores: ' + info.response);
-            });
-        }
-    });
-};
-
-// Función para manejar la respuesta del cuestionario
-const handle_quiz_response = async (req, res) => {
-    const { id_cuestionario, usuarioId } = req.body; // Asegúrate de pasar `usuarioId` en el cuerpo de la solicitud
-
-    // Verificar si el cuestionario es el de id = 13
-    if (id_cuestionario === 13) {
-        try {
-            // Obtener el usuario de la base de datos
-            const usuario = await Usuarios.findByPk(usuarioId, {
-                attributes: ['nombre', 'email'] // Solo necesitamos `nombre` y `email`
-            });
-
-            // Verificar si el usuario existe
-            if (!usuario) {
-                return res.status(404).json({
-                    status: false,
-                    response: "Usuario no encontrado"
-                });
-            }
-
-            // Enviar correo a los administradores con los datos del usuario
-            await send_mail_quiz_response(usuario);
-            res.json({
-                status: true,
-                response: "Respuesta del cuestionario procesada y correo enviado"
-            });
-
-        } catch (error) {
-            console.error('Error al procesar la respuesta del cuestionario:', error);
-            res.status(500).json({
-                status: false,
-                response: "Error al procesar la respuesta del cuestionario"
-            });
-        }
-    } else {
-        // Si no es el cuestionario con id = 13, solo responde sin enviar el correo
-        res.json({
-            status: true,
-            response: "Respuesta del cuestionario procesada"
-        });
-    }
-};
 
 export const methods = {
     send_mail_recovery_pass,
-    handle_quiz_response
+    
 };
 

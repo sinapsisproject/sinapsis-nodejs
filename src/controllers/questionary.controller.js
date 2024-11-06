@@ -6,8 +6,51 @@ import { course } from '../models/course.model.js';
 import { module } from '../models/module.model.js';
 import { user } from '../models/user.model.js';
 
+import nodemailer from 'nodemailer';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import ejs from 'ejs';
+
+
 import Ope from 'sequelize';
 const {Op} = Ope;
+
+// Función de envío de correo
+const send_mail_quiz_response = async (usuario) => {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const htmlPath = path.join(__dirname, 'ticketera', 'assets', 'templates', 'quiz_response.ejs');
+
+    ejs.renderFile(htmlPath, { usuario }, (err, html) => {
+        if (err) {
+            console.error('Error al leer el archivo HTML');
+            return;
+        } else {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'contacto@sinapsisclinica.com',
+                    pass: process.env.CLAVE_APP_GMAIL
+                }
+            });
+
+            const mailOptions = {
+                from: 'contacto@sinapsisclinica.com',
+                to: 'adagnino@sinapsisclinica.com, nicolasgomez7@live.cl',
+                subject: `Evaluación final completada por ${usuario.nombre}`,
+                html: html
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Correo enviado a administradores: ' + info.response);
+            });
+        }
+    });
+};
+
 
 const createQuestionary = async(req , res) => {
 
@@ -233,6 +276,8 @@ const assessmentFinalByUser = async(req, res) => {
         let suma_puntos_ponderados = 0;
         let puntos_ponderados_final = 0;
 
+        let evaluacion_final_aprobada = false; // Variable para verificar si hay evaluación final aprobada
+
         objectJson[0].modulos.forEach(modulo => {
 
             modulo.cuestionarios.forEach(prueba => {
@@ -294,6 +339,11 @@ const assessmentFinalByUser = async(req, res) => {
         })
 
         let estado_final = suma_puntos_ponderados >= nota_aprobacion ? "aprobado" : "no aprobado";
+
+        // Enviar correo solo si el estado final es aprobado y la evaluación es del tipo "final"
+        if (estado_final === "aprobado" && evaluacion_final_aprobada) {
+            await send_mail_quiz_response(dataUser);
+        }
 
 
         res.json({
